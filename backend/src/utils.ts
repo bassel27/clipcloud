@@ -22,5 +22,8 @@ export function isVideo(filePathOrName: string): boolean {
 
 export function getPublicUrl(filePath: string): string {
   const baseUrl = process.env.BASE_URL;
-  return `${baseUrl}/${filePath}`;
+  const fileName = path.basename(filePath);  
+   const parentFolder = path.basename(path.dirname(filePath)); 
+   const result = path.join(parentFolder, fileName);
+  return `${baseUrl}/${result}`;
 }

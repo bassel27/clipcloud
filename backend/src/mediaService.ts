@@ -12,7 +12,7 @@ export async function getAllMediaHandler(): Promise<Media[]> {
 
 export async function generateThumbnailHandler(videoPath: string, thumbnailFileName: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    ffmpeg(path.join(SRC_PATH,videoPath))
+    ffmpeg(path.join(SRC_PATH, videoPath))
       .screenshots({
         timestamps: ['50%'],
         filename: thumbnailFileName,

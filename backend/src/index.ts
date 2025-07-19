@@ -21,9 +21,9 @@ dotenv.config();
 const app = express();
 app.use(cors());  // Allows all origins (*) to access the API
 app.use(express.json());  // middleware to accept JSON body requests
-app.use('/uploads/videos', express.static(VIDEOS_PATH));  // exposes the folder to the outside world  // Any request to a URL that starts with /uploads will serve the actual file from your disk.
-app.use('/uploads/thumbnails', express.static(THUMBNAILS_PATH));
-app.use('/uploads/images', express.static(IMAGES_PATH));
+app.use('/videos', express.static(VIDEOS_PATH));  // exposes the folder to the outside world  // Any request to a URL that starts with /uploads will serve the actual file from your disk.
+app.use('/thumbnails', express.static(THUMBNAILS_PATH));
+app.use('/images', express.static(IMAGES_PATH));
 
 app.use((req, res, next) => { // attaches a UUID to every incoming request before file upload happens.
   (req as any).uuid = uuidv4();
