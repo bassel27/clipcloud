@@ -56,21 +56,21 @@ app.post('/media/upload', upload.single('media'), async (req: Request, res: Resp
       return; // Explicit return instead of returning the response
     }
 
-    const title = req.body.title || 'Untitled';
+    
     const uuid = (req as any).uuid;
     const ext = path.extname(req.file.originalname).toLowerCase();
     const filename = `${uuid}${ext}`;
 
     if (isVideo(req.file.filename)) {
       const videoPath = path.join('videos', filename);
-      const media = await registerVideoHandler(title, videoPath, uuid);
+      const media = await registerVideoHandler( videoPath, uuid);
       res.status(201).json(media);
       return;
     }
 
     if (isImage(req.file.filename)) {
       const imagePath = path.join('images', filename);
-      const media = await registerImageHandler(title, imagePath, uuid);
+      const media = await registerImageHandler( imagePath, uuid);
       res.status(201).json(media);
       return;
     }

@@ -5,7 +5,6 @@ export enum MediaType {
 
 export interface Media {
   id: string; 
-  title: string;
   type: MediaType;
   isLiked: boolean;
   createdAt: string; 

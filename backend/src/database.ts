@@ -49,7 +49,6 @@ export async function toggleLike(id: string): Promise<Media | null> {
 
 export async function createMedia(media: {
   id: string;
-  title: string;
   filePath: string;
   thumbnailPath?: string;
   type: MediaType;
@@ -57,11 +56,10 @@ export async function createMedia(media: {
   createdAt: string;
 }): Promise<void> {
   await pool.query(`
-    INSERT INTO media (id, title, file_path, thumbnail_path, is_liked, created_at, type)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO media (id, file_path, thumbnail_path, is_liked, created_at, type)
+    VALUES (?, ?, ?, ?, ?, ?)
   `, [
     media.id,
-    media.title,
     media.filePath,
     media.thumbnailPath || null,
     media.isLiked,
@@ -73,7 +71,6 @@ export async function createMedia(media: {
 function mapRowToMedia(row: RowDataPacket): Media {
   return {
     id: row.id,
-    title: row.title,
     type: row.type as MediaType,
     isLiked: !!row.is_liked,
     createdAt: row.created_at,

@@ -23,7 +23,6 @@ export async function generateThumbnailHandler(videoPath: string, thumbnailFileN
 }
 
 async function registerMediaBase(
-  title: string,
   filePath: string,  // Relative path like 'videos/abc123.mp4'
   type: MediaType,
   fileId: string, 
@@ -33,7 +32,6 @@ async function registerMediaBase(
 
   await createMedia({
     id: fileId,
-    title,
     filePath,
     thumbnailPath,
     type,
@@ -43,7 +41,6 @@ async function registerMediaBase(
 
   return {
     id: fileId,
-    title,
     type,
     isLiked: false,
     createdAt,
@@ -53,7 +50,6 @@ async function registerMediaBase(
 }
 
 export async function registerVideoHandler(
-  title: string,
   filePath: string,
   uuid: string
 ): Promise<Media> {
@@ -61,7 +57,6 @@ export async function registerVideoHandler(
   const thumbnailPath = await generateThumbnailHandler(filePath, thumbnailFileName);
   
   return registerMediaBase(
-    title,
     filePath,
     MediaType.Video,
     uuid,
@@ -70,12 +65,10 @@ export async function registerVideoHandler(
 }
 
 export async function registerImageHandler(
-  title: string,
   filePath: string,
   uuid: string
 ): Promise<Media> {
   return registerMediaBase(
-    title,
     filePath,
     MediaType.Image,
     uuid
