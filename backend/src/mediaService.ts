@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import ffmpeg from 'fluent-ffmpeg';
 import { Media, MediaType } from './models/media.model';
-import { THUMBNAILS_PATH } from './constants';
+import { SRC_PATH, THUMBNAILS_PATH } from './constants';
 import { getPublicUrl, nowDateSQLFormat } from './utils';
 import { createMedia, getAllMedia, toggleLike } from './database';
+import path from 'path';
 
 export async function getAllMediaHandler(): Promise<Media[]> {
   return await getAllMedia();
@@ -11,13 +12,13 @@ export async function getAllMediaHandler(): Promise<Media[]> {
 
 export async function generateThumbnailHandler(videoPath: string, thumbnailFileName: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    ffmpeg(videoPath)
+    ffmpeg(path.join(SRC_PATH,videoPath))
       .screenshots({
         timestamps: ['50%'],
         filename: thumbnailFileName,
         folder: THUMBNAILS_PATH,
       })
-      .on('end', () => resolve(`${THUMBNAILS_PATH}/${thumbnailFileName}`))
+      .on('end', () => resolve(path.join('uploads', 'thumbnails', thumbnailFileName)))
       .on('error', reject);
   });
 }
@@ -50,14 +51,14 @@ async function registerMediaBase(
 }
 
 export async function registerVideoHandler(
-  filePath: string,
+  videoPath: string,
   uuid: string
 ): Promise<Media> {
   const thumbnailFileName = `${uuid}.jpg`;
-  const thumbnailPath = await generateThumbnailHandler(filePath, thumbnailFileName);
+  const thumbnailPath = await generateThumbnailHandler(videoPath, thumbnailFileName);
   
   return registerMediaBase(
-    filePath,
+    videoPath,
     MediaType.Video,
     uuid,
     thumbnailPath

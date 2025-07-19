@@ -21,6 +21,6 @@ export function isVideo(filePathOrName: string): boolean {
 }
 
 export function getPublicUrl(filePath: string): string {
-  const baseUrl = process.env.MEDIA_BASE_URL || 'http://localhost:3000';
-  return `${baseUrl}/uploads/${filePath}`;
+  const baseUrl = process.env.BASE_URL;
+  return `${baseUrl}/${filePath}`;
 }

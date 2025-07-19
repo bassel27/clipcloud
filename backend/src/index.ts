@@ -62,14 +62,14 @@ app.post('/media/upload', upload.single('media'), async (req: Request, res: Resp
     const filename = `${uuid}${ext}`;
 
     if (isVideo(req.file.filename)) {
-      const videoPath = path.join('videos', filename);
+      const videoPath = path.join('uploads', 'videos', filename);
       const media = await registerVideoHandler( videoPath, uuid);
       res.status(201).json(media);
       return;
     }
 
     if (isImage(req.file.filename)) {
-      const imagePath = path.join('images', filename);
+      const imagePath = path.join('uploads', 'images', filename);
       const media = await registerImageHandler( imagePath, uuid);
       res.status(201).json(media);
       return;
