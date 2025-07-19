@@ -4,11 +4,11 @@ export enum MediaType {
 }
 
 export interface Media {
-  id: string;
+  id: string; 
   title: string;
-  filePath: string;
-  thumbnailPath?: string;
-  isLiked: boolean;
-  timeCreated: string;
   type: MediaType;
+  isLiked: boolean;
+  createdAt: string; 
+  url: string; 
+  thumbnailUrl?: string; 
 }

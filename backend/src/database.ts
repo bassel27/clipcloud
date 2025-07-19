@@ -2,6 +2,7 @@ import mysql, { FieldPacket, RowDataPacket } from 'mysql2';
 import dotenv from 'dotenv';
 import { Media, MediaType } from './models/media.model';
 import { v4 as uuidv4 } from 'uuid';
+import { getPublicUrl, nowDateSQLFormat } from './utils';
 
 dotenv.config();
 
@@ -12,8 +13,9 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME
 }).promise();
 
+
 export async function getAllMedia(): Promise<Media[]> {
-  const [rows] = await pool.query('SELECT * FROM media ORDER BY time_created DESC');
+  const [rows] = await pool.query('SELECT * FROM media ORDER BY created_at DESC');
   return (rows as RowDataPacket[]).map(mapRowToMedia);
 }
 
@@ -45,31 +47,37 @@ export async function toggleLike(id: string): Promise<Media | null> {
   }
 }
 
-export async function createMedia(media: Media): Promise<Media> {
+export async function createMedia(media: {
+  id: string;
+  title: string;
+  filePath: string;
+  thumbnailPath?: string;
+  type: MediaType;
+  isLiked: boolean;
+  createdAt: string;
+}): Promise<void> {
   await pool.query(`
-    INSERT INTO media (id, title, file_path, thumbnail_path, is_liked, time_created, type)
+    INSERT INTO media (id, title, file_path, thumbnail_path, is_liked, created_at, type)
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `, [
     media.id,
     media.title,
     media.filePath,
-    media.thumbnailPath ?? null,
+    media.thumbnailPath || null,
     media.isLiked,
-    media.timeCreated,
+    media.createdAt,
     media.type
   ]);
-
-  return media;
 }
 
-function mapRowToMedia(row: any): Media {
+function mapRowToMedia(row: RowDataPacket): Media {
   return {
     id: row.id,
     title: row.title,
-    filePath: row.file_path,
-    thumbnailPath: row.thumbnail_path || undefined,
+    type: row.type as MediaType,
     isLiked: !!row.is_liked,
-    timeCreated: row.time_created,
-    type: row.type as MediaType
+    createdAt: row.created_at,
+    url: getPublicUrl(row.file_path),
+    thumbnailUrl: row.thumbnail_path ? getPublicUrl(row.thumbnail_path) : undefined
   };
 }

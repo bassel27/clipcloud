@@ -2,18 +2,18 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import multer from 'multer';
+import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import {
-   getAllMediaHandler,
+  getAllMediaHandler,
   registerVideoHandler,
   toggleLikeHandler,
-  generateThumbnailHandler,
   registerImageHandler,
 } from './mediaService';
 import { Request, Response } from 'express';
-import { IMAGES_PATH, THUMBNAILS_PATH, VIDEOS_PATH } from './constants';
+import { IMAGES_PATH, THUMBNAILS_PATH, VIDEOS_PATH} from './constants';
 import path from 'path';
-import { MediaType } from './models/media.model';
+import { Media, MediaType } from './models/media.model';
 import { isImage, isVideo } from './utils';
 
 dotenv.config();
@@ -49,67 +49,63 @@ const upload = multer({
   })
 });
 
-
-
-
 app.post('/media/upload', upload.single('media'), async (req: Request, res: Response) => {
-if (!req.file) {
+  try {
+    if (!req.file) {
       res.status(400).json({ message: 'No file uploaded' });
-      return;
+      return; // Explicit return instead of returning the response
     }
 
-    const title = req.body.title;
-    
-    let type = null;
-    if (isImage(req.file.filename)) {
-      type = MediaType.Image;
-    } else if (isVideo(req.file.filename)) {
-      type = MediaType.Video;
-    }
-    else{
-      res.status(400).json({ message: 'Unsupported file type' });
-      return;
-    }
-  
-    let relativeFilePath: string;
-    let thumbnailPath: string | undefined = undefined;
-
-    const uuid = (req as any).uuid; 
+    const title = req.body.title || 'Untitled';
+    const uuid = (req as any).uuid;
     const ext = path.extname(req.file.originalname).toLowerCase();
-    if (type === MediaType.Video) {
-      relativeFilePath = path.join('uploads', 'videos', req.file.filename);
+    const filename = `${uuid}${ext}`;
 
-      const absoluteVideoPath = path.join(VIDEOS_PATH, req.file.filename);
-      const thumbnailFileName = `${uuid}.jpg`;      
-      await generateThumbnailHandler(absoluteVideoPath,thumbnailFileName );
-
-      thumbnailPath = path.join('uploads', 'thumbnails',thumbnailFileName );
-
-      const newVideo = await registerVideoHandler(title, relativeFilePath, thumbnailPath, uuid);
-      res.status(201).json(newVideo);
-    } else {
-      relativeFilePath = path.join('uploads', 'images', `${uuid}${ext}`);
-
-      const newImage = await registerImageHandler(title, relativeFilePath, uuid);
-      res.status(201).json(newImage);
+    if (isVideo(req.file.filename)) {
+      const videoPath = path.join('videos', filename);
+      const media = await registerVideoHandler(title, videoPath, uuid);
+      res.status(201).json(media);
+      return;
     }
-  }
-);
 
-app.post('/media/:id/like',async (req: Request, res: Response) => {
-  const id = req.params.id;
-  const updatedVideo = await toggleLikeHandler(id);
-  if (updatedVideo) {
-    res.json(updatedVideo);
-  } else {
-    res.status(404).json({ message: 'Video not found' });
+    if (isImage(req.file.filename)) {
+      const imagePath = path.join('images', filename);
+      const media = await registerImageHandler(title, imagePath, uuid);
+      res.status(201).json(media);
+      return;
+    }
+
+    res.status(400).json({ message: 'Unsupported file type' });
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ message: 'Error processing upload' });
+  }
+});
+
+app.post('/media/:id/like', async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const updatedMedia = await toggleLikeHandler(id);
+    if (updatedMedia) {
+      res.json(updatedMedia);
+    } else {
+      res.status(404).json({ message: 'Media not found' });
+    }
+  } catch (error) {
+    console.error('Like toggle error:', error);
+    res.status(500).json({ message: 'Error toggling like' });
   }
 });
 
 app.get('/media', async (req: Request, res: Response) => {
-  const mediaList = await getAllMediaHandler();
-  res.json(mediaList);
-});
+  try {
+    const mediaList = await getAllMediaHandler();
+    res.json(mediaList);
+  } catch (error) {
+    console.error('Error fetching media:', error);
+    res.status(500).json({ message: 'Error fetching media' });
+  }
+})
 
 const PORT = process.env.PORT || 3081;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

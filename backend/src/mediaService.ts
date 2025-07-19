@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import ffmpeg from 'fluent-ffmpeg';
 import { Media, MediaType } from './models/media.model';
 import { THUMBNAILS_PATH } from './constants';
-import { nowDateSQLFormat } from './utils';
+import { getPublicUrl, nowDateSQLFormat } from './utils';
 import { createMedia, getAllMedia, toggleLike } from './database';
 
 export async function getAllMediaHandler(): Promise<Media[]> {
@@ -10,7 +10,6 @@ export async function getAllMediaHandler(): Promise<Media[]> {
 }
 
 export async function generateThumbnailHandler(videoPath: string, thumbnailFileName: string): Promise<string> {
-  
   return new Promise((resolve, reject) => {
     ffmpeg(videoPath)
       .screenshots({
@@ -18,47 +17,69 @@ export async function generateThumbnailHandler(videoPath: string, thumbnailFileN
         filename: thumbnailFileName,
         folder: THUMBNAILS_PATH,
       })
-      .on('end', () => resolve(thumbnailFileName))
+      .on('end', () => resolve(`${THUMBNAILS_PATH}/${thumbnailFileName}`))
       .on('error', reject);
   });
 }
 
 async function registerMediaBase(
   title: string,
-  filePath: string,
+  filePath: string,  // Relative path like 'videos/abc123.mp4'
   type: MediaType,
-  uuid: string,
+  fileId: string, 
   thumbnailPath?: string
 ): Promise<Media> {
-  const newMedia: Media = {
-    id: uuid,
+  const createdAt = nowDateSQLFormat();
+
+  await createMedia({
+    id: fileId,
     title,
     filePath,
     thumbnailPath,
+    type,
     isLiked: false,
-    timeCreated: nowDateSQLFormat(),
-    type
-  };
+    createdAt
+  });
 
-  await createMedia(newMedia);
-  return newMedia;
+  return {
+    id: fileId,
+    title,
+    type,
+    isLiked: false,
+    createdAt,
+    url: getPublicUrl(filePath),
+    thumbnailUrl: thumbnailPath ? getPublicUrl(thumbnailPath) : undefined
+  };
 }
 
 export async function registerVideoHandler(
   title: string,
   filePath: string,
-  thumbnailPath: string,
   uuid: string
 ): Promise<Media> {
-  return registerMediaBase(title, filePath, MediaType.Video, uuid, thumbnailPath);
+  const thumbnailFileName = `${uuid}.jpg`;
+  const thumbnailPath = await generateThumbnailHandler(filePath, thumbnailFileName);
+  
+  return registerMediaBase(
+    title,
+    filePath,
+    MediaType.Video,
+    uuid,
+    thumbnailPath
+  );
 }
 
 export async function registerImageHandler(
   title: string,
   filePath: string,
-  uuid: string 
+  uuid: string
 ): Promise<Media> {
-  return registerMediaBase(title, filePath, MediaType.Image, uuid);
+  return registerMediaBase(
+    title,
+    filePath,
+    MediaType.Image,
+    uuid
+  );
 }
 
 export async function toggleLikeHandler(id: string): Promise<Media> {
