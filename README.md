@@ -1,0 +1,2 @@
+# Postman
+You can find my postman backend collection here: https://grad-project-9975.postman.co/workspace/Personal~aec82f60-08b4-4964-8861-0b9414f1b7c4/collection/44435924-1bb3ce08-54bf-4cf3-9bb0-1adac6b8afd9?action=share&source=copy-link&creator=44435924
