@@ -1,0 +1,69 @@
+import path from "path";
+import { getAllMediaHandler, registerImageHandler, registerVideoHandler, toggleLikeHandler } from "../mediaService";
+import { Request, Response } from 'express';
+import { isImage, isVideo } from "../utils";
+
+const toggleLike = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const updatedMedia = await toggleLikeHandler(id);
+    if (updatedMedia) {
+      res.json(updatedMedia);
+    } else {
+      res.status(404).json({ message: 'Media not found' });
+    }
+  } catch (error) {
+    console.error('Like toggle error:', error);
+    res.status(500).json({ message: 'Error toggling like' });
+  }
+}
+
+
+const getAllMedia = async (req: Request, res: Response) => {
+  try {
+    const mediaList = await getAllMediaHandler();
+    res.json(mediaList);
+  } catch (error) {
+    console.error('Error fetching media:', error);
+    res.status(500).json({ message: 'Error fetching media' });
+  }
+}
+
+const uploadMedia = async (req: Request, res: Response) => {
+  try {
+    if (!req.file) {
+      res.status(400).json({ message: 'No file uploaded' });
+      return; // Explicit return instead of returning the response
+    }
+
+    
+    const uuid = (req as any).uuid;
+    const ext = path.extname(req.file.originalname).toLowerCase();
+    const filename = `${uuid}${ext}`;
+
+    if (isVideo(req.file.filename)) {
+      const videoPath = path.join('uploads', 'videos', filename);
+      const media = await registerVideoHandler( videoPath, uuid);
+      res.status(201).json(media);
+      return;
+    }
+
+    if (isImage(req.file.filename)) {
+      const imagePath = path.join('uploads', 'images', filename);
+      const media = await registerImageHandler( imagePath, uuid);
+      res.status(201).json(media);
+      return;
+    }
+
+    res.status(400).json({ message: 'Unsupported file type' });
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ message: 'Error processing upload' });
+  }
+}
+
+module.exports = {
+    uploadMedia,
+    toggleLike,
+    getAllMedia
+}
