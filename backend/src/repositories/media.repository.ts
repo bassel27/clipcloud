@@ -1,25 +1,18 @@
+
 import mysql, { FieldPacket, RowDataPacket } from 'mysql2';
 import dotenv from 'dotenv';
-import { Media, MediaType } from './models/media.model';
 import { v4 as uuidv4 } from 'uuid';
-import { getPublicUrl, nowDateSQLFormat } from './utils';
-
-dotenv.config();
-
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
-}).promise();
+import { Media, MediaType } from '../models/media.model';
+import { getPublicUrl } from '../utils/media.utils';
+import pool from '../config/database';
 
 
-export async function getAllMedia(): Promise<Media[]> {
+export async function findAll(): Promise<Media[]> {
   const [rows] = await pool.query('SELECT * FROM media ORDER BY created_at DESC');
   return (rows as RowDataPacket[]).map(mapRowToMedia);
 }
 
-export async function getMedia(id: string): Promise<Media | undefined> {
+export async function findById(id: string): Promise<Media | undefined> {
   const [rows] = await pool.query(
     `SELECT * FROM media WHERE id = ?`,
     [id]
@@ -30,7 +23,7 @@ export async function getMedia(id: string): Promise<Media | undefined> {
 
 export async function toggleLike(id: string): Promise<Media | null> {
   try {
-    const media = await getMedia(id);
+    const media = await findById(id);
     if (!media) return null;
 
     const newIsLiked = !media.isLiked;
@@ -47,7 +40,7 @@ export async function toggleLike(id: string): Promise<Media | null> {
   }
 }
 
-export async function createMedia(media: {
+export async function create(media: {
   id: string;
   filePath: string;
   thumbnailPath?: string;

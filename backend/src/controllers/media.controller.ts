@@ -1,12 +1,12 @@
 import path from "path";
-import { getAllMediaHandler, registerImageHandler, registerVideoHandler, toggleLikeHandler } from "../mediaService";
+import { getAllMedia, registerImage, registerVideo, toggleLike } from "../services/media.service";
 import { Request, Response } from 'express';
-import { isImage, isVideo } from "../utils";
+import { isImage, isVideo } from "../utils/media.utils";
 
-const toggleLike = async (req: Request, res: Response) => {
+const toggleLikeHandler = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const updatedMedia = await toggleLikeHandler(id);
+    const updatedMedia = await toggleLike(id);
     if (updatedMedia) {
       res.json(updatedMedia);
     } else {
@@ -19,9 +19,9 @@ const toggleLike = async (req: Request, res: Response) => {
 }
 
 
-const getAllMedia = async (req: Request, res: Response) => {
+const getAllMediaHandler = async (req: Request, res: Response) => {
   try {
-    const mediaList = await getAllMediaHandler();
+    const mediaList = await getAllMedia();
     res.json(mediaList);
   } catch (error) {
     console.error('Error fetching media:', error);
@@ -29,7 +29,7 @@ const getAllMedia = async (req: Request, res: Response) => {
   }
 }
 
-const uploadMedia = async (req: Request, res: Response) => {
+const uploadMediaHandler = async (req: Request, res: Response) => {
   try {
     if (!req.file) {
       res.status(400).json({ message: 'No file uploaded' });
@@ -43,14 +43,14 @@ const uploadMedia = async (req: Request, res: Response) => {
 
     if (isVideo(req.file.filename)) {
       const videoPath = path.join('uploads', 'videos', filename);
-      const media = await registerVideoHandler( videoPath, uuid);
+      const media = await registerVideo( videoPath, uuid);
       res.status(201).json(media);
       return;
     }
 
     if (isImage(req.file.filename)) {
       const imagePath = path.join('uploads', 'images', filename);
-      const media = await registerImageHandler( imagePath, uuid);
+      const media = await registerImage( imagePath, uuid);
       res.status(201).json(media);
       return;
     }
@@ -63,7 +63,7 @@ const uploadMedia = async (req: Request, res: Response) => {
 }
 
 module.exports = {
-    uploadMedia,
-    toggleLike,
-    getAllMedia
+    uploadMedia: uploadMediaHandler,
+    toggleLike: toggleLikeHandler,
+    getAllMedia: getAllMediaHandler
 }
