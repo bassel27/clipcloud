@@ -1,0 +1,50 @@
+
+.card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  margin: 0;
+}
+
+.time {
+  margin: 0;
+}
+
+.mediaContainer {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  margin-top: 8px;
+  background-color: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.likeButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
