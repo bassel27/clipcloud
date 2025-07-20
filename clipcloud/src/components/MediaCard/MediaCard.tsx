@@ -1,4 +1,4 @@
-import { Media } from '@/types/media';
+import { Media, MediaType } from '@/types/media';
 import styles from './MediaCard.module.css';
 import { API_BASE_URL } from '@/utils/constats';
 import { useState } from 'react';
@@ -21,7 +21,7 @@ export default function MediaCard({ media }: { media: Media }) {
     <div className={styles.card}>
 
       <div className={styles.mediaContainer}>
-        {media.type === 'image' ? (
+        {media.type === MediaType.Image ? (
           <img
             src={media.url}
             alt={"image"}
