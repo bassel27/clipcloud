@@ -1,4 +1,7 @@
 import path from "path";
+import { getAllMedia, registerImage, registerVideo, toggleLike} from "../services/media.service";
+import { Request, RequestHandler, Response } from 'express';
+import fs from 'fs';
 
 export function nowDateSQLFormat() {
    return new Date().toISOString().slice(0, 19).replace('T', ' ');

@@ -11,18 +11,13 @@ class MediaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String mediaUrl = '$kBackendBaseUrl/${media.filePath}';
-    final String? thumbnailUrl = media.thumbnailPath != null
-        ? '$kBackendBaseUrl/${media.thumbnailPath}'
-        : null;
-
     return GestureDetector(
       onTap: () {
         if (media.type == MediaType.video) {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => VideoPlayerScreen(videoUrl: mediaUrl),
+              builder: (_) => VideoPlayerScreen(videoUrl: media.url),
             ),
           );
         }
@@ -41,7 +36,7 @@ class MediaCard extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Image.network(
-                    thumbnailUrl ?? mediaUrl,
+                    media.thumbnailUrl ?? media.url,
                     width: double.infinity,
                     fit: BoxFit.contain,
                   ),
@@ -65,15 +60,6 @@ class MediaCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
                 children: [
-                  Expanded(
-                    child: Text(
-                      media.title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
                   IconButton(
                     icon: Icon(
                       media.isLiked ? Icons.favorite : Icons.favorite_border,

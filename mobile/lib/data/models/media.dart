@@ -1,47 +1,49 @@
+import 'package:mobile/constatns.dart';
+
 class Media {
   final String id;
-  final String title;
-  final String filePath;
-  final String? thumbnailPath;
-  bool isLiked;
-  final String timeCreated;
   final MediaType type;
+  bool isLiked;
+  final String createdAt;
+  final String urlDelete;
+  final String? thumbnailUrlDelete;
 
   Media({
     required this.id,
-    required this.title,
-    required this.filePath,
-    this.thumbnailPath,
-    required this.isLiked,
-    required this.timeCreated,
     required this.type,
+    required this.isLiked,
+    required this.createdAt,
+    required this.urlDelete,
+    this.thumbnailUrlDelete,
   });
+
+  String get url =>
+      '$kBackendBaseUrl/${type == MediaType.video ? 'videos' : 'images'}/$id';
+  String? get thumbnailUrl =>
+      type == MediaType.video ? '$kBackendBaseUrl/thumbnails/$id' : null;
 
   factory Media.fromJson(Map<String, dynamic> json) {
     return Media(
       id: json['id'],
-      title: json['title'],
-      filePath: json['filePath'],
-      thumbnailPath: json['thumbnailPath'],
-      isLiked: json['isLiked'],
-      timeCreated: json['timeCreated'],
       type: mediaTypeFromString(json['type']),
+      isLiked: json['isLiked'],
+      createdAt: json['createdAt'],
+      urlDelete: json['url'],
+      thumbnailUrlDelete: json['thumbnailUrl'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'title': title,
-      'filePath': filePath,
-      'thumbnailPath': thumbnailPath,
-      'isLiked': isLiked,
-      'timeCreated': timeCreated,
       'type': type.name,
+      'isLiked': isLiked,
+      'createdAt': createdAt,
+      'url': urlDelete,
+      'thumbnailUrl': thumbnailUrl,
     };
   }
 }
-
 
 enum MediaType { video, image }
 
