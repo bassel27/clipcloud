@@ -23,6 +23,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/media', mediaRoutes);
-app.use('/signup', authRoutes);
+app.use('/auth', authRoutes);
 
 export default app;

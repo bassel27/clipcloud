@@ -18,3 +18,18 @@ export const create = async (email: string, hashedPassword: string): Promise<Use
     return { id, email, password: hashedPassword };
 
 };
+
+export const saveRefreshToken = async (userId: number, token: string) => {
+  await pool.execute(
+    "UPDATE users SET refresh_token = ? WHERE id = ?",
+    [token, userId]
+  );
+};
+
+export const getUserByRefreshToken = async (token: string): Promise<User | null> => {
+  const [rows]: any = await pool.execute(
+    "SELECT * FROM users WHERE refresh_token = ?",
+    [token]
+  );
+  return rows.length > 0 ? rows[0] : null;
+};
