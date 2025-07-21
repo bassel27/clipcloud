@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constatns.dart';
 import 'package:mobile/data/models/media.dart';
 import 'package:mobile/presentation/screens/video_player_screen.dart';
 
