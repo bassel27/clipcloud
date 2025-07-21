@@ -1,5 +1,5 @@
 import path from "path";
-import { getAllMedia, registerImage, registerVideo, toggleLike } from "../services/media.service";
+import { getAllMedia, registerImage, registerVideo, toggleLike} from "../services/media.service";
 import { Request, Response } from 'express';
 import { isImage, isVideo } from "../utils/media.utils";
 

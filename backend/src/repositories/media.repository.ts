@@ -21,7 +21,7 @@ export async function findById(id: string): Promise<Media | undefined> {
   return rows.length > 0 ? mapRowToMedia(rows[0]) : undefined;
 }
 
-export async function toggleLike(id: string): Promise<Media | null> {
+export async function updateMediaLikeStatusById(id: string): Promise<Media | null> {
   try {
     const media = await findById(id);
     if (!media) return null;

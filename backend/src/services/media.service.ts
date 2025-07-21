@@ -4,7 +4,8 @@ import { Media, MediaType } from '../models/media.model';
 import { SRC_PATH, THUMBNAILS_PATH } from '../config/constants';
 import { getPublicUrl, nowDateSQLFormat } from '../utils/media.utils';
 import path from 'path';
-import { create, findAll }from '../repositories/media.repository';
+import {  findAll, create, updateMediaLikeStatusById} from '../repositories/media.repository';
+
 
 export async function getAllMedia(): Promise<Media[]> {
   return await findAll();
@@ -77,7 +78,7 @@ export async function registerImage(
 }
 
 export async function toggleLike(id: string): Promise<Media> {
-  const toggled = await toggleLike(id);
+  const toggled = await updateMediaLikeStatusById(id);
 
   if (!toggled) {
     throw new Error(`Media with ID ${id} not found`);
