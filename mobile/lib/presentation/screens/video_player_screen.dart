@@ -3,8 +3,9 @@ import 'package:video_player/video_player.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   final String videoUrl;
+  final String? authToken;
 
-  const VideoPlayerScreen({super.key, required this.videoUrl});
+  const VideoPlayerScreen({super.key, required this.videoUrl, this.authToken});
 
   @override
   State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
@@ -12,57 +13,122 @@ class VideoPlayerScreen extends StatefulWidget {
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late VideoPlayerController _controller;
+  bool _isInitialized = false;
+  bool _hasError = false;
+  bool _isPlaying = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
-      ..initialize().then((_) { // Prepares the video for playback (e.g. gets metadata, dimensions, etc).
-        setState(() {});
-        _controller.play();
+    _initializeVideoPlayer();
+  }
+
+  Future<void> _initializeVideoPlayer() async {
+    try {
+      // Create headers map (empty if no token)
+      final headers = widget.authToken != null
+          ? {'Authorization': 'Bearer ${widget.authToken}'}
+          : <String, String>{};
+
+      // Initialize controller
+      _controller =
+          VideoPlayerController.network(widget.videoUrl, httpHeaders: headers)
+            ..addListener(_videoStateListener)
+            ..initialize()
+                .then((_) {
+                  if (mounted) {
+                    setState(() {
+                      _isInitialized = true;
+                    });
+                    _controller.play();
+                  }
+                })
+                .catchError((error) {
+                  if (mounted) {
+                    setState(() {
+                      _hasError = true;
+                    });
+                  }
+                });
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _hasError = true;
+        });
+      }
+    }
+  }
+
+  void _videoStateListener() {
+    if (mounted) {
+      setState(() {
+        _isPlaying = _controller.value.isPlaying;
       });
+    }
+  }
+
+  void _togglePlayPause() {
+    _isPlaying ? _controller.pause() : _controller.play();
+  }
+
+  Future<void> _retryLoading() async {
+    if (mounted) {
+      setState(() {
+        _hasError = false;
+        _isInitialized = false;
+      });
+    }
+    await _initializeVideoPlayer();
   }
 
   @override
   void dispose() {
+    _controller.removeListener(_videoStateListener);
     _controller.dispose();
     super.dispose();
-  }
-
-  void _togglePlayPause() {
-    setState(() {
-      _controller.value.isPlaying ? _controller.pause() : _controller.play();
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          GestureDetector(
-            onTap: _togglePlayPause,
-            child: Center(
-              child: _controller.value.isInitialized
-                  ? AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
-                    )
-                  : const CircularProgressIndicator(),
-            ),
-          ),
-          Positioned(
-            top: 40,
-            left: 20,
-            child: FloatingActionButton(
-              mini: true,
-              backgroundColor: Colors.black.withOpacity(0.6),
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Icon(Icons.arrow_back, color: Colors.white),
-            ),
-          ),
-        ],
+      appBar: AppBar(
+        title: const Text('Video Player'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: Center(
+        child: _hasError
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 48),
+                  const SizedBox(height: 16),
+                  const Text('Failed to load video'),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _retryLoading,
+                    child: const Text('Retry'),
+                  ),
+                ],
+              )
+            : !_isInitialized
+            ? const CircularProgressIndicator()
+            : AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    VideoPlayer(_controller),
+                    if (!_isPlaying)
+                      IconButton(
+                        icon: const Icon(Icons.play_arrow, size: 50),
+                        onPressed: _togglePlayPause,
+                      ),
+                  ],
+                ),
+              ),
       ),
     );
   }

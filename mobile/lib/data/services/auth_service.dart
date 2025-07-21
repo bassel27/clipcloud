@@ -72,4 +72,14 @@ class AuthService with ChangeNotifier {
     if (_accessToken == null) return false;
     return _accessTokenExpiry?.isAfter(DateTime.now()) ?? false;
   }
+
+  Future<Map<String, String>> getAuthHeaders() async {
+    if (!await isTokenValid() && _refreshToken != null) {
+      await refreshTokens(); // Auto-refresh if token expired
+    }
+    return {
+      'Authorization': 'Bearer $_accessToken',
+      'Content-Type': 'application/json',
+    };
+  }
 }

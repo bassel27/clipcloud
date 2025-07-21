@@ -6,17 +6,31 @@ import 'package:mobile/data/repositories/auth_repository.dart';
 import 'package:mobile/data/repositories/media_repository.dart';
 import 'package:mobile/data/services/media_service.dart';
 import 'package:provider/provider.dart';
-import 'data/services/auth_service.dart';
-import 'presentation/screens/auth_screen.dart';
-import 'presentation/screens/media_screen.dart';
+import 'package:mobile/data/services/auth_service.dart';
+import 'package:mobile/presentation/screens/auth_screen.dart';
+import 'package:mobile/presentation/screens/media_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
+
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => AuthService(
-        AuthRepository(baseUrl: kBackendBaseUrl, client: http.Client()),
-      ),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AuthService(
+            AuthRepository(baseUrl: kBackendBaseUrl, client: http.Client()),
+          ),
+        ),
+        Provider(
+          create: (context) => MediaRepository(
+            baseUrl: kBackendBaseUrl,
+            authService: context.read<AuthService>(),
+          ),
+        ),
+        Provider(
+          create: (context) => MediaService(context.read<MediaRepository>()),
+        ),
+      ],
       child: const MyApp(),
     ),
   );
@@ -33,11 +47,7 @@ class MyApp extends StatelessWidget {
       home: Consumer<AuthService>(
         builder: (context, auth, child) {
           return auth.isAuthenticated
-              ? MediaPage(
-                  mediaService: MediaService(
-                    MediaRepository(baseUrl: kBackendBaseUrl),
-                  ),
-                )
+              ? MediaPage(mediaService: context.read<MediaService>())
               : const AuthScreen();
         },
       ),

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constatns.dart';
-import 'package:mobile/data/repositories/media_repository.dart';
 import 'package:mobile/data/services/media_service.dart';
 import 'package:provider/provider.dart';
 import '../../data/services/auth_service.dart';
-import 'media_screen.dart'; // Your media page
+import 'media_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -33,22 +31,27 @@ class _AuthScreenState extends State<AuthScreen> {
       } else {
         await auth.signUp(_emailController.text, _passwordController.text);
       }
-      // Navigate to media page after successful auth
+
+      final mediaService = Provider.of<MediaService>(context, listen: false);
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) =>  MediaPage(mediaService: MediaService(MediaRepository(baseUrl: kBackendBaseUrl)),)),  // TODO: change
+        MaterialPageRoute(
+          builder: (context) => MediaPage(mediaService: mediaService),
+        ),
       );
     } catch (e) {
-      setState(() => _error = e.toString());
+      setState(() => _error = e.toString().replaceAll('Exception: ', ''));
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: const Text('Authentication')),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -64,18 +67,21 @@ class _AuthScreenState extends State<AuthScreen> {
               obscureText: true,
             ),
             if (_error != null)
-              Text(_error!, style: const TextStyle(color: Colors.red)),
+              Text(
+                _error!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
             const SizedBox(height: 20),
             _isLoading
                 ? const CircularProgressIndicator()
                 : ElevatedButton(
                     onPressed: _submit,
-                    child: Text(_isLogin ? 'Login' : 'Sign Up'),
+                    child: Text(_isLogin ? 'LOGIN' : 'SIGN UP'),
                   ),
             TextButton(
               onPressed: () => setState(() => _isLogin = !_isLogin),
               child: Text(
-                _isLogin ? 'Create account' : 'Already have an account?',
+                _isLogin ? 'Create new account' : 'I already have an account',
               ),
             ),
           ],
