@@ -1,5 +1,5 @@
 import pool from "../config/database";
-import { User } from "../models/signup.model";
+import { User } from "../models/auth.model";
 
 export const findUserByEmail = async (email: string): Promise<User | null> => {
     const [rows]: any = await pool.execute(

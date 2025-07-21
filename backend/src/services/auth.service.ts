@@ -1,4 +1,4 @@
-import { findUserByEmail, create } from "../repositories/signup.repository";
+import { findUserByEmail, create } from "../repositories/auth.repository";
 import bcrypt from 'bcrypt';
 
 export const signupUser = async (email: string, password: string) => {
