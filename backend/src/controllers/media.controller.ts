@@ -3,7 +3,7 @@ import { getAllMedia, registerImage, registerVideo, toggleLike } from "../servic
 import { Request, Response } from 'express';
 import { isImage, isVideo } from "../utils/media.utils";
 
-const toggleLikeHandler = async (req: Request, res: Response) => {
+export const toggleLikeHandler = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const updatedMedia = await toggleLike(id);
@@ -19,7 +19,7 @@ const toggleLikeHandler = async (req: Request, res: Response) => {
 }
 
 
-const getAllMediaHandler = async (req: Request, res: Response) => {
+export const getAllMediaHandler = async (req: Request, res: Response) => {
   try {
     const mediaList = await getAllMedia();
     res.json(mediaList);
@@ -29,7 +29,7 @@ const getAllMediaHandler = async (req: Request, res: Response) => {
   }
 }
 
-const uploadMediaHandler = async (req: Request, res: Response) => {
+export const uploadMediaHandler = async (req: Request, res: Response) => {
   try {
     if (!req.file) {
       res.status(400).json({ message: 'No file uploaded' });
@@ -43,14 +43,14 @@ const uploadMediaHandler = async (req: Request, res: Response) => {
 
     if (isVideo(req.file.filename)) {
       const videoPath = path.join('uploads', 'videos', filename);
-      const media = await registerVideo( videoPath, uuid);
+      const media = await registerVideo(videoPath, uuid);
       res.status(201).json(media);
       return;
     }
 
     if (isImage(req.file.filename)) {
       const imagePath = path.join('uploads', 'images', filename);
-      const media = await registerImage( imagePath, uuid);
+      const media = await registerImage(imagePath, uuid);
       res.status(201).json(media);
       return;
     }
@@ -60,10 +60,4 @@ const uploadMediaHandler = async (req: Request, res: Response) => {
     console.error('Upload error:', error);
     res.status(500).json({ message: 'Error processing upload' });
   }
-}
-
-module.exports = {
-    uploadMedia: uploadMediaHandler,
-    toggleLike: toggleLikeHandler,
-    getAllMedia: getAllMediaHandler
 }

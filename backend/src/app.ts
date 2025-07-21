@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { IMAGES_PATH, THUMBNAILS_PATH, VIDEOS_PATH } from './config/constants';
 import mediaRoutes from './routes/media.routes';
+import signupRoutes from './routes/signup.routes';
 
 dotenv.config();
 
@@ -22,5 +23,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/media', mediaRoutes);
+app.use('/signup', signupRoutes);
 
 export default app;
