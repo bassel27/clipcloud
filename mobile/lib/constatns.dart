@@ -1,1 +1,3 @@
-const String kBackendBaseUrl = 'http://192.168.1.29:3081';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+final String kBackendBaseUrl = dotenv.env['BACKEND_BASE_URL']!;

@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   chewie: ^1.12.1
   file_picker: ^10.2.0
+  flutter_dotenv: ^5.2.1
   
 
 dev_dependencies:

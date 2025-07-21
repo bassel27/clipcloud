@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile/constatns.dart';
 import 'package:mobile/data/repositories/media_repository.dart';
 import 'package:mobile/data/services/media_service.dart';
 import 'package:mobile/presentation/screens/media_screen.dart';
 
-void main() {
+void main() async {
+  await dotenv.load();
   runApp(const MyApp());
 }
 
