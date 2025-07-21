@@ -27,3 +27,26 @@ export function getPublicUrl(filePath: string): string {
    const result = path.join(parentFolder, fileName);
   return `${baseUrl}/${result}`;
 }
+
+
+export const serveFileById = (basePath: string): RequestHandler => {
+  return (req: Request, res: Response): void => {
+    const { id } = req.params;
+
+    try {
+      const files = fs.readdirSync(basePath);
+      const matchedFile = files.find(file => file.startsWith(id + '.'));
+
+      if (!matchedFile) {
+        res.status(404).json({ message: 'File not found' });
+        return;
+      }
+
+      const filePath = path.join(basePath, matchedFile);
+      res.sendFile(filePath);
+    } catch (error) {
+      console.error('Error reading directory or sending file:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+};

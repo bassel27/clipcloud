@@ -1,7 +1,8 @@
 import path from "path";
 import { getAllMedia, registerImage, registerVideo, toggleLike} from "../services/media.service";
-import { Request, Response } from 'express';
+import { Request, RequestHandler, Response } from 'express';
 import { isImage, isVideo } from "../utils/media.utils";
+import fs from 'fs';
 
 export const toggleLikeHandler = async (req: Request, res: Response) => {
   try {

@@ -6,6 +6,7 @@ import { IMAGES_PATH, THUMBNAILS_PATH, VIDEOS_PATH } from './config/constants';
 import mediaRoutes from './routes/media.routes';
 import authRoutes from './routes/auth.routes';
 import { verifyAccessToken } from './middlewares/auth.middleware';
+import { serveFileById } from './utils/media.utils';
 
 dotenv.config();
 
@@ -14,9 +15,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/videos',verifyAccessToken ,express.static(VIDEOS_PATH));
-app.use('/thumbnails', verifyAccessToken ,express.static(THUMBNAILS_PATH));
-app.use('/images',verifyAccessToken , express.static(IMAGES_PATH));
+app.get('/videos/:id', verifyAccessToken, serveFileById(VIDEOS_PATH));
+app.get('/thumbnails/:id', verifyAccessToken, serveFileById(THUMBNAILS_PATH));
+app.get('/images/:id', verifyAccessToken, serveFileById(IMAGES_PATH));
 
 app.use((req, res, next) => {
   (req as any).uuid = require('uuid').v4();
