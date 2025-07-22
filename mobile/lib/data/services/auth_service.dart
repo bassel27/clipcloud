@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:mobile/data/repositories/auth_repository.dart';
 
 class AuthService with ChangeNotifier {
-  final AuthRepository repository;
+  final AuthRepository _repo;
   String? _accessToken;
   String? _refreshToken;
   DateTime? _accessTokenExpiry;
 
-  AuthService(this.repository);
+  AuthService(this._repo);
 
   String? get accessToken => _accessToken;
   String? get refreshToken => _refreshToken;
@@ -19,12 +19,12 @@ class AuthService with ChangeNotifier {
       (_accessTokenExpiry?.isAfter(DateTime.now()) ?? false);
 
   Future<void> signIn(String email, String password) async {
-    final data = await repository.signIn(email, password);
+    final data = await _repo.signIn(email, password);
     _updateTokens(data['accessToken'], data['refreshToken']);
   }
 
   Future<void> signUp(String email, String password) async {
-    await repository.signUp(email, password);
+    await _repo.signUp(email, password);
     await signIn(email, password);
   }
 
@@ -34,7 +34,7 @@ class AuthService with ChangeNotifier {
       throw Exception('Session expired - please login again');
     }
 
-    final data = await repository.refreshToken(_refreshToken!);
+    final data = await _repo.refreshToken(_refreshToken!);
     _updateTokens(
       data['accessToken'],
       data['refreshToken'] ??
