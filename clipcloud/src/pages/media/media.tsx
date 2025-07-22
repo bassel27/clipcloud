@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, ChangeEvent } from 'react';
-import MediaCard from '../components/MediaCard/MediaCard';
+import MediaCard from '../../components/MediaCard/MediaCard';
 import { Media } from '@/types/media';
-import styles from './index.module.css';
+import styles from './media.module.css';
 import { useRouter } from 'next/router';
 import { fetchMedia, uploadMedia } from '@/services/mediaService';
 

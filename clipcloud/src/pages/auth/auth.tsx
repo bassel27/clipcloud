@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { login, register } from '@/services/authService';
-import { access } from 'fs';
-
+import styles from './AuthPage.module.css';
 
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true);
@@ -17,12 +16,12 @@ export default function AuthPage() {
 
         try {
             const data = isLogin
-            ? await login(email, password)
-            : await register(email, password);
-            const accessToken = data.accessToken
+                ? await login(email, password)
+                : await register(email, password);
+
+            const accessToken = data.accessToken;
             localStorage.setItem('access_token', accessToken);
-            // setToken(accessToken);
-            console.log(accessToken)
+            console.log(accessToken);
             router.push('/media');
         } catch (err: any) {
             setError(err.message || 'Something went wrong');
@@ -30,16 +29,18 @@ export default function AuthPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-            <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-                <h2 className="text-2xl font-bold mb-4">{isLogin ? 'Sign In' : 'Sign Up'}</h2>
+        <div className={styles.container}>
+            <form onSubmit={handleSubmit} className={styles.form}>
+                <h2 className={styles.heading}>
+                    {isLogin ? 'Sign In' : 'Sign Up'}
+                </h2>
 
-                {error && <p className="text-red-500 mb-2">{error}</p>}
+                {error && <p className={styles.error}>{error}</p>}
 
                 <input
                     type="email"
                     placeholder="Email"
-                    className="w-full mb-3 p-2 border rounded"
+                    className={styles.input}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -47,24 +48,21 @@ export default function AuthPage() {
                 <input
                     type="password"
                     placeholder="Password"
-                    className="w-full mb-4 p-2 border rounded"
+                    className={styles.input}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
 
-                <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-                >
+                <button type="submit" className={styles.button}>
                     {isLogin ? 'Sign In' : 'Sign Up'}
                 </button>
 
-                <p className="text-sm mt-4 text-center">
-                    {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
+                <p className={styles.switchText}>
+                    {isLogin ? "Don't have an account?" : 'Already have an account?'}
                     <button
                         type="button"
-                        className="text-blue-500 underline"
+                        className={styles.switchButton}
                         onClick={() => setIsLogin(!isLogin)}
                     >
                         {isLogin ? 'Sign Up' : 'Sign In'}
