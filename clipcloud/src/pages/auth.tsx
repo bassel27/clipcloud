@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { login, register } from '@/services/authService';
+import { access } from 'fs';
 
 
 export default function AuthPage() {
@@ -13,16 +14,15 @@ export default function AuthPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-          var data ;
+
         try {
-            if (isLogin) {
-              data = await login(email, password);
-            } else {
-                await register(email, password);
-            }
-            const { access_token } = data;
-            console.log("saving token")
-            localStorage.setItem('access_token', access_token);
+            const data = isLogin
+            ? await login(email, password)
+            : await register(email, password);
+            const accessToken = data.accessToken
+            localStorage.setItem('access_token', accessToken);
+            // setToken(accessToken);
+            console.log(accessToken)
             router.push('/media');
         } catch (err: any) {
             setError(err.message || 'Something went wrong');

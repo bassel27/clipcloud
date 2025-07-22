@@ -11,12 +11,12 @@ api.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-  console.log("token is " + token)
   return config;
 });
 
 export const fetchMedia = async (): Promise<Media[]> => {
   const res = await api.get('/media');
+  console.log(res.data)
   return res.data;
 };
 

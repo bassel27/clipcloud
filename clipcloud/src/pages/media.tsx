@@ -11,13 +11,8 @@ export default function MediaPage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  useEffect(() => {
-    // const token = localStorage.getItem('access_token');
-    // if (!token) {
-    //   router.push('/auth');
-    //   return;
-    // }
 
+  useEffect(() => {
     const loadMedia = (async () => {
       try {
         const data = await fetchMedia();
