@@ -1,9 +1,9 @@
 import { Media, MediaType } from '@/types/media';
 import styles from './MediaCard.module.css';
-import { API_BASE_URL } from '@/utils/constats';
+import { API_BASE_URL } from '@/utils/constants';
 import { useState } from 'react';
-import { toggleLike } from '@/utils/api';
 import { Heart } from 'lucide-react';
+import { toggleLike } from '@/services/mediaService';
 
 export default function MediaCard({ media }: { media: Media }) {
   const [isLiked, setIsLiked] = useState(media.isLiked);

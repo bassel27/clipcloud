@@ -51,6 +51,7 @@
   background-color: #ccc;
   cursor: not-allowed;
 }
+
 .floatingUploadBtn {
   position: fixed;
   bottom: 24px;
