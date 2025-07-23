@@ -37,7 +37,6 @@ export const uploadMediaHandler = async (req: Request, res: Response) => {
       return; 
     }
 
-    
     const uuid = (req as any).uuid;
     const ext = path.extname(req.file.originalname).toLowerCase();
     const filename = `${uuid}${ext}`;

@@ -6,10 +6,10 @@ import { IMAGES_PATH, THUMBNAILS_PATH, VIDEOS_PATH } from './config/constants';
 import mediaRoutes from './routes/media.routes';
 import authRoutes from './routes/auth.routes';
 import { verifyAccessToken } from './middlewares/auth.middleware';
-import { serveFileById } from './utils/media.utils';
+import { ensureDirectoriesExist, serveFileById } from './utils/media.utils';
 
 dotenv.config();
-
+ensureDirectoriesExist([VIDEOS_PATH, THUMBNAILS_PATH, IMAGES_PATH]);
 const app = express();
 
 app.use(cors());

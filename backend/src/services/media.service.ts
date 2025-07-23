@@ -6,13 +6,17 @@ import { SRC_PATH, THUMBNAILS_PATH } from '../config/constants';
 import { getPublicUrl, nowDateSQLFormat } from '../utils/media.utils';
 import path from 'path';
 import {  findAll, create, updateMediaLikeStatusById} from '../repositories/media.repository';
-
+import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';
+import ffprobeInstaller from '@ffprobe-installer/ffprobe';
 
 export async function getAllMedia(): Promise<Media[]> {
   return await findAll();
 }
 
-ffmpeg.setFfmpegPath(ffmpegPath!);
+
+
+ffmpeg.setFfmpegPath(ffmpegInstaller.path);
+ffmpeg.setFfprobePath(ffprobeInstaller.path);
 
 export async function generateThumbnail(videoPath: string, thumbnailFileName: string): Promise<string> {
   return new Promise((resolve, reject) => {

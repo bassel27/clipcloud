@@ -57,3 +57,13 @@ export const serveFileById = (basePath: string): RequestHandler => {
     }
   };
 };
+
+export function ensureDirectoriesExist(paths: string[]) {
+  console.log("here we go");
+  for (const path of paths) {
+    
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path, { recursive: true });
+    }
+  }
+}
