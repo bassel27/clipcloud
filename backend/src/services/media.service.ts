@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import ffmpeg from 'fluent-ffmpeg';
+import ffmpegPath from 'ffmpeg-static';
 import { Media, MediaType } from '../models/media.model';
 import { SRC_PATH, THUMBNAILS_PATH } from '../config/constants';
 import { getPublicUrl, nowDateSQLFormat } from '../utils/media.utils';
@@ -10,6 +11,8 @@ import {  findAll, create, updateMediaLikeStatusById} from '../repositories/medi
 export async function getAllMedia(): Promise<Media[]> {
   return await findAll();
 }
+
+ffmpeg.setFfmpegPath(ffmpegPath!);
 
 export async function generateThumbnail(videoPath: string, thumbnailFileName: string): Promise<string> {
   return new Promise((resolve, reject) => {
