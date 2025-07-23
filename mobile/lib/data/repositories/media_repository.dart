@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:mobile/data/models/media.dart';
 import 'package:mobile/data/services/auth_service.dart';
@@ -21,13 +22,48 @@ class MediaRepository {
               error.response?.statusCode == 403) {
             try {
               await authService.refreshTokens();
-
               final newHeaders = await authService.getAuthHeaders();
 
-              error.requestOptions.headers.addAll(newHeaders);
+              // Check if this is an upload request that needs FormData recreation
+              if (error.requestOptions.extra['isUpload'] == true) {
+                final title = error.requestOptions.extra['title'] as String;
+                final filePath =
+                    error.requestOptions.extra['filePath'] as String;
 
-              final response = await _dio.fetch(error.requestOptions);
-              handler.resolve(response);
+                final newFormData = FormData.fromMap({
+                  'title': title,
+                  'media': await MultipartFile.fromFile(filePath),
+                });
+
+                final newOptions = RequestOptions(
+                  path: error.requestOptions.path,
+                  method: error.requestOptions.method,
+                  baseUrl: error.requestOptions.baseUrl,
+                  headers: {...error.requestOptions.headers, ...newHeaders},
+                  data: newFormData,
+                  extra: error.requestOptions.extra,
+                );
+
+                final response = await _dio.fetch(newOptions);
+                handler.resolve(response);
+              } else {
+                // For non-upload requests, use the original approach
+                final newOptions = RequestOptions(
+                  path: error.requestOptions.path,
+                  method: error.requestOptions.method,
+                  baseUrl: error.requestOptions.baseUrl,
+                  headers: {...error.requestOptions.headers, ...newHeaders},
+                  queryParameters: error.requestOptions.queryParameters,
+                  data: error.requestOptions.data,
+                  connectTimeout: error.requestOptions.connectTimeout,
+                  receiveTimeout: error.requestOptions.receiveTimeout,
+                  sendTimeout: error.requestOptions.sendTimeout,
+                  responseType: error.requestOptions.responseType,
+                );
+
+                final response = await _dio.fetch(newOptions);
+                handler.resolve(response);
+              }
             } catch (refreshError) {
               print('Token refresh failed: $refreshError');
               handler.next(error);
@@ -52,13 +88,19 @@ class MediaRepository {
 
   Future<Media> uploadMedia({required String title, required File file}) async {
     try {
-      final formData = FormData.fromMap({
-        'title': title,
-        'media': await MultipartFile.fromFile(file.path),
-      });
+      // Store file info for potential retry
+      final filePath = file.path;
 
-      final response = await _dio.post('/media/upload', data: formData);
-
+      final response = await _dio.post(
+        '/media/upload',
+        data: FormData.fromMap({
+          'title': title,
+          'media': await MultipartFile.fromFile(filePath),
+        }),
+        options: Options(
+          extra: {'isUpload': true, 'title': title, 'filePath': filePath},
+        ),
+      );
       return Media.fromJson(response.data);
     } on DioException catch (e) {
       throw Exception('Failed to upload media: ${e.message}');
@@ -71,6 +113,18 @@ class MediaRepository {
       return Media.fromJson(response.data);
     } on DioException catch (e) {
       throw Exception('Failed to toggle like: ${e.message}');
+    }
+  }
+
+  Future<Uint8List> getImageBytes(String imageUrl) async {
+    try {
+      final response = await _dio.get(
+        imageUrl,
+        options: Options(responseType: ResponseType.bytes),
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw Exception('Failed to load image: ${e.message}');
     }
   }
 }

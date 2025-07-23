@@ -2,9 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/data/models/media.dart';
 import 'package:mobile/presentation/screens/video_player_screen.dart';
-import '../../data/services/auth_service.dart';
-import 'authenticated_image.dart';
-import 'package:provider/provider.dart';
 
 class MediaCard extends StatelessWidget {
   final Media media;
@@ -35,9 +32,8 @@ class MediaCard extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          AuthenticatedImage(
-            imageUrl: media.thumbnailUrl ?? media.url,
-            fit: BoxFit.cover,
+          Image.network(
+            media.thumbnailUrl ?? media.url,
           ),
           if (media.type == MediaType.video) _buildPlayIcon(),
         ],
@@ -75,16 +71,11 @@ class MediaCard extends StatelessWidget {
 
   void _handleMediaTap(BuildContext context) {
     if (media.type == MediaType.video) {
-      // Navigate to player
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => VideoPlayerScreen(
             videoUrl: media.url,
-            authToken: Provider.of<AuthService>(
-              context,
-              listen: false,
-            ).accessToken, // Get from your AuthService
           ),
         ),
       );

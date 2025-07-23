@@ -4,7 +4,11 @@ import { Request, RequestHandler, Response } from 'express';
 import fs from 'fs';
 
 export function nowDateSQLFormat() {
-   return new Date().toISOString().slice(0, 19).replace('T', ' ');
+  const now = new Date();
+  const pad = (n: number) => n.toString().padStart(2, '0');
+
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ` +
+         `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 }
 
 export function isImage(filePath: string): boolean {

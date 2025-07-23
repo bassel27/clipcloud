@@ -34,7 +34,7 @@ class AuthRepository {
   }
 
   Future<Map<String, dynamic>> refreshToken(String refreshToken) async {
-    return _makeAuthRequest('refresh-token', {'token': refreshToken});
+    return _makeAuthRequest('refresh-token', {'refreshToken': refreshToken});
   }
 }
 

@@ -1,11 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   final String videoUrl;
-  final String? authToken;
 
-  const VideoPlayerScreen({super.key, required this.videoUrl, this.authToken});
+  const VideoPlayerScreen({super.key, required this.videoUrl});
 
   @override
   State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
@@ -14,127 +14,78 @@ class VideoPlayerScreen extends StatefulWidget {
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late VideoPlayerController _controller;
   bool _isInitialized = false;
-  bool _hasError = false;
-  bool _isPlaying = false;
+  bool _showOverlay = false;
+  Timer? _overlayTimer;
 
   @override
   void initState() {
     super.initState();
-    _initializeVideoPlayer();
-  }
-
-  Future<void> _initializeVideoPlayer() async {
-    try {
-      final headers = widget.authToken != null
-          ? {'Authorization': 'Bearer ${widget.authToken}'}
-          : <String, String>{};
-
-      _controller =
-          VideoPlayerController.network(widget.videoUrl, httpHeaders: headers)
-            ..addListener(_videoStateListener)
-            ..initialize()
-                .then((_) {
-                  if (mounted) {
-                    setState(() {
-                      _isInitialized = true;
-                    });
-                    _controller.play();
-                  }
-                })
-                .catchError((_) {
-                  if (mounted) {
-                    setState(() {
-                      _hasError = true;
-                    });
-                  }
-                });
-    } catch (_) {
-      if (mounted) {
+    _controller = VideoPlayerController.network(widget.videoUrl)
+      ..initialize().then((_) {
         setState(() {
-          _hasError = true;
+          _isInitialized = true;
         });
-      }
-    }
-  }
-
-  void _videoStateListener() {
-    if (mounted) {
-      setState(() {
-        _isPlaying = _controller.value.isPlaying;
+        _controller.play();
       });
-    }
-  }
-
-  void _togglePlayPause() {
-    if (_isPlaying) {
-      _controller.pause();
-    } else {
-      _controller.play();
-    }
-  }
-
-  Future<void> _retryLoading() async {
-    if (mounted) {
-      setState(() {
-        _hasError = false;
-        _isInitialized = false;
-      });
-    }
-    await _initializeVideoPlayer();
   }
 
   @override
   void dispose() {
-    _controller.removeListener(_videoStateListener);
+    _overlayTimer?.cancel();
     _controller.dispose();
     super.dispose();
+  }
+
+  void _togglePlayPause() {
+    setState(() {
+      if (_controller.value.isPlaying) {
+        _controller.pause();
+      } else {
+        _controller.play();
+      }
+      _showOverlay = true;
+    });
+
+    // Restart overlay timer
+    _overlayTimer?.cancel();
+    _overlayTimer = Timer(const Duration(seconds: 1), () {
+      setState(() {
+        _showOverlay = false;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Video Player'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      appBar: AppBar(title: const Text('Video Player')),
       body: Center(
-        child: _hasError
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, size: 48),
-                  const SizedBox(height: 16),
-                  const Text('Failed to load video'),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _retryLoading,
-                    child: const Text('Retry'),
-                  ),
-                ],
-              )
-            : !_isInitialized
-            ? const CircularProgressIndicator()
-            : AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: GestureDetector(
-                  onTap: _togglePlayPause,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      VideoPlayer(_controller),
-                      if (!_isPlaying)
-                        const Icon(
-                          Icons.play_arrow,
-                          size: 50,
-                          color: Colors.white,
+        child: _isInitialized
+            ? GestureDetector(
+                onTap: _togglePlayPause,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: VideoPlayer(_controller),
+                    ),
+                    if (_showOverlay)
+                      AnimatedOpacity(
+                        opacity: _showOverlay ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 200),
+                        child: Icon(
+                          _controller.value.isPlaying
+                              ? Icons.pause_circle_filled
+                              : Icons.play_circle_fill,
+                          size: 100,
+                          color: Colors.white.withOpacity(0.8),
                         ),
-                    ],
-                  ),
+                      ),
+                  ],
                 ),
-              ),
+              )
+            : const CircularProgressIndicator(),
       ),
     );
   }

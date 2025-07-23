@@ -15,9 +15,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/videos/:id', verifyAccessToken, serveFileById(VIDEOS_PATH));
-app.get('/thumbnails/:id', verifyAccessToken, serveFileById(THUMBNAILS_PATH));
-app.get('/images/:id', verifyAccessToken, serveFileById(IMAGES_PATH));
+app.get('/videos/:id', serveFileById(VIDEOS_PATH));
+app.get('/thumbnails/:id', serveFileById(THUMBNAILS_PATH));
+app.get('/images/:id', serveFileById(IMAGES_PATH));
 
 app.use((req, res, next) => {
   (req as any).uuid = require('uuid').v4();
