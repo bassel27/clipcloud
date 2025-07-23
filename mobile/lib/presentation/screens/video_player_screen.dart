@@ -25,12 +25,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   Future<void> _initializeVideoPlayer() async {
     try {
-      // Create headers map (empty if no token)
       final headers = widget.authToken != null
           ? {'Authorization': 'Bearer ${widget.authToken}'}
           : <String, String>{};
 
-      // Initialize controller
       _controller =
           VideoPlayerController.network(widget.videoUrl, httpHeaders: headers)
             ..addListener(_videoStateListener)
@@ -43,14 +41,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     _controller.play();
                   }
                 })
-                .catchError((error) {
+                .catchError((_) {
                   if (mounted) {
                     setState(() {
                       _hasError = true;
                     });
                   }
                 });
-    } catch (e) {
+    } catch (_) {
       if (mounted) {
         setState(() {
           _hasError = true;
@@ -68,7 +66,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   void _togglePlayPause() {
-    _isPlaying ? _controller.pause() : _controller.play();
+    if (_isPlaying) {
+      _controller.pause();
+    } else {
+      _controller.play();
+    }
   }
 
   Future<void> _retryLoading() async {
@@ -117,16 +119,20 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             ? const CircularProgressIndicator()
             : AspectRatio(
                 aspectRatio: _controller.value.aspectRatio,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    VideoPlayer(_controller),
-                    if (!_isPlaying)
-                      IconButton(
-                        icon: const Icon(Icons.play_arrow, size: 50),
-                        onPressed: _togglePlayPause,
-                      ),
-                  ],
+                child: GestureDetector(
+                  onTap: _togglePlayPause,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      VideoPlayer(_controller),
+                      if (!_isPlaying)
+                        const Icon(
+                          Icons.play_arrow,
+                          size: 50,
+                          color: Colors.white,
+                        ),
+                    ],
+                  ),
                 ),
               ),
       ),

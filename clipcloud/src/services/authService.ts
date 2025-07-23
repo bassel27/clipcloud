@@ -1,26 +1,6 @@
 import { API_BASE_URL } from "@/utils/constants";
+import { TOKEN_STORAGE } from "@/utils/tokenStorage";
 import axios from "axios";
-
-export const TOKEN_STORAGE = {
-  setTokens: (accessToken: string, refreshToken: string) => {
-    // TODO: Use httpOnly cookies in production, sessionStorage as fallback
-    sessionStorage.setItem('access_token', accessToken);
-    sessionStorage.setItem('refresh_token', refreshToken);
-  },
-  
-  getAccessToken: (): string | null => {
-    return sessionStorage.getItem('access_token');
-  },
-  
-  getRefreshToken: (): string | null => {
-    return sessionStorage.getItem('refresh_token');
-  },
-  
-  clearTokens: () => {
-    sessionStorage.removeItem('access_token');
-    sessionStorage.removeItem('refresh_token');
-  }
-};
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -32,7 +12,6 @@ apiClient.interceptors.request.use(
     const token = TOKEN_STORAGE.getAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log("token is "  + token)
     }
     return config;
   },

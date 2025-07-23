@@ -34,7 +34,7 @@ export const uploadMediaHandler = async (req: Request, res: Response) => {
   try {
     if (!req.file) {
       res.status(400).json({ message: 'No file uploaded' });
-      return; // Explicit return instead of returning the response
+      return; 
     }
 
     

@@ -1,71 +1,76 @@
-import 'dart:convert';
 import 'dart:io';
-
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:mobile/data/models/media.dart';
 import 'package:mobile/data/services/auth_service.dart';
 
 class MediaRepository {
-  final String baseUrl;
+  final Dio _dio;
   final AuthService authService;
 
-  MediaRepository({required this.baseUrl, required this.authService});
+  MediaRepository({required String baseUrl, required this.authService})
+    : _dio = Dio(BaseOptions(baseUrl: baseUrl)) {
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final headers = await authService.getAuthHeaders();
+          options.headers.addAll(headers);
+          handler.next(options);
+        },
+        onError: (error, handler) async {
+          if (error.response?.statusCode == 401 ||
+              error.response?.statusCode == 403) {
+            try {
+              await authService.refreshTokens();
+
+              final newHeaders = await authService.getAuthHeaders();
+
+              error.requestOptions.headers.addAll(newHeaders);
+
+              final response = await _dio.fetch(error.requestOptions);
+              handler.resolve(response);
+            } catch (refreshError) {
+              print('Token refresh failed: $refreshError');
+              handler.next(error);
+            }
+          } else {
+            handler.next(error);
+          }
+        },
+      ),
+    );
+  }
 
   Future<List<Media>> getAllMedia() async {
-    final headers = await authService.getAuthHeaders();
-    final response = await http.get(
-      Uri.parse('$baseUrl/media'),
-      headers: headers,
-    );
-    if (response.statusCode == 200) {
-      final List<dynamic> decoded = jsonDecode(
-        response.body,
-      ); // parses that string into a Dart List or Map structure.
-      return decoded.map((json) => Media.fromJson(json)).toList();
-    } else {
-      throw Exception('Failed to fetch media');
+    try {
+      final response = await _dio.get('/media');
+      final List<dynamic> data = response.data;
+      return data.map((json) => Media.fromJson(json)).toList();
+    } on DioException catch (e) {
+      throw Exception('Failed to fetch media: ${e.message}');
     }
   }
 
   Future<Media> uploadMedia({required String title, required File file}) async {
-    final headers = await authService.getAuthHeaders();
+    try {
+      final formData = FormData.fromMap({
+        'title': title,
+        'media': await MultipartFile.fromFile(file.path),
+      });
 
-    // 2. Create multipart request
-    final request = http.MultipartRequest(
-      'POST',
-      Uri.parse('$baseUrl/media/upload'),
-    );
+      final response = await _dio.post('/media/upload', data: formData);
 
-    // 3. Manually set headers (including auth)
-    request.headers.addAll(headers);
-
-    request.fields['title'] = title;
-    request.files.add(
-      await http.MultipartFile.fromPath('media', file.path),
-    ); // adds the file to the request. // media is key that the server expects
-
-    final streamedResponse = await request.send();
-    final response = await http.Response.fromStream(streamedResponse);
-
-    if (response.statusCode == 201) {
-      return Media.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to upload media');
+      return Media.fromJson(response.data);
+    } on DioException catch (e) {
+      throw Exception('Failed to upload media: ${e.message}');
     }
   }
 
   Future<Media> toggleLike(String id) async {
-    final headers = await authService.getAuthHeaders();
-
-    final response = await http.post(
-      Uri.parse('$baseUrl/media/$id/like'),
-      headers: headers,
-    );
-
-    if (response.statusCode == 200) {
-      return Media.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to toggle like');
+    try {
+      final response = await _dio.post('/media/$id/like');
+      return Media.fromJson(response.data);
+    } on DioException catch (e) {
+      throw Exception('Failed to toggle like: ${e.message}');
     }
   }
 }

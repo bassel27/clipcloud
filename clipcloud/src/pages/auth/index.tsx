@@ -12,11 +12,11 @@ export default function AuthPage() {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
-    useEffect(() => {
-        if (isAuthenticated()) {
-            router.push('/media');
-        }
-    }, [router]);
+    // useEffect(() => {
+    //     if (isAuthenticated()) {
+    //         router.push('/media');
+    //     }
+    // }, [router]);
 
     
     const validateInputs = () => {

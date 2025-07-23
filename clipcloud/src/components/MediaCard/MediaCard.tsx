@@ -3,37 +3,46 @@ import styles from './MediaCard.module.css';
 import { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import { toggleLike } from '@/services/mediaService';
-import { getAuthToken, getMediaUrl, getThumbnailUrl } from '@/utils/utils';
+import { getMediaUrl, getThumbnailUrl } from '@/utils/utils';
+import { TOKEN_STORAGE } from '@/utils/tokenStorage'; // New import
 
 export default function MediaCard({ media }: { media: Media }) {
   const [isLiked, setIsLiked] = useState(media.isLiked);
   const [mediaUrl, setMediaUrl] = useState('');
   const [thumbnailUrl, setThumbnailUrl] = useState('');
-  const token = getAuthToken();
+
   useEffect(() => {
     const fetchMedia = async () => {
       try {
-        // Fetch media with auth header
+        const token = TOKEN_STORAGE.getAccessToken(); // Use TOKEN_STORAGE here
+        if (!token) throw new Error('No access token available');
+
         const response = await fetch(getMediaUrl(media.id, media.type), {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
+        
+        if (!response.ok) throw new Error('Failed to fetch media');
+        
         const blob = await response.blob();
         setMediaUrl(URL.createObjectURL(blob));
 
-        // Fetch thumbnail if video
         if (media.type === MediaType.Video) {
           const thumbResponse = await fetch(getThumbnailUrl(media.id), {
             headers: {
               'Authorization': `Bearer ${token}`
             }
           });
+          
+          if (!thumbResponse.ok) throw new Error('Failed to fetch thumbnail');
+          
           const thumbBlob = await thumbResponse.blob();
           setThumbnailUrl(URL.createObjectURL(thumbBlob));
         }
       } catch (error) {
         console.error('Error loading media:', error);
+        // Handle error (e.g., show placeholder or retry)
       }
     };
 
@@ -43,10 +52,13 @@ export default function MediaCard({ media }: { media: Media }) {
       if (mediaUrl) URL.revokeObjectURL(mediaUrl);
       if (thumbnailUrl) URL.revokeObjectURL(thumbnailUrl);
     };
-  }, [media.id, media.type, token]);
+  }, [media.id, media.type]);
 
   const handleToggleLike = async () => {
     try {
+      const token = TOKEN_STORAGE.getAccessToken(); // Use here too if needed
+      if (!token) throw new Error('Not authenticated');
+      
       const updatedIsLiked = await toggleLike(media.id);
       setIsLiked(updatedIsLiked);
     } catch (error) {
@@ -54,6 +66,7 @@ export default function MediaCard({ media }: { media: Media }) {
     }
   };
 
+ 
  return (
     <div className={styles.card}>
       <div className={styles.mediaContainer}>
