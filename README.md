@@ -5,39 +5,24 @@
 
 The backend is built using Express.js with TypeScript, containerized with Docker, and deployed on AWS ECS using Fargate. Docker images are stored in Amazon ECR.
 
-## Setup Instructions
+## Postman
 
-No setup required. The backend is already deployed and accessible.
+The backend API collection is available on Postman [here](https://grad-project-9975.postman.co/workspace/Personal~aec82f60-08b4-4964-8861-0b9414f1b7c4/collection/44435924-1bb3ce08-54bf-4cf3-9bb0-1adac6b8afd9?action=share&source=copy-link&creator=44435924).
 
 # Database
 
 The database is implemented using MySQL and deployed via AWS RDS in a private subnet for security. It is only accessible through the backend ECS container. Both the backend and the database are in the same VPC, which has an Internet Gateway (IGW) to allow public access to the backend only.
-
-## Setup Instructions
-
-No setup required. The database is already deployed.
 
 # Frontend
 
 The frontend is developed using React with TypeScript.
 
 # Setup Instructions
+No setup required for backend and database. Both are already deployed and accessible. Otherwise, for the frontend React app:
 1. Clone the project.
 2. Run "docker-compose up -d --pull always" in main directory
-
-
-# Mobile
-
-The mobile app is built using Flutter.
-
-## Setup Instructions
-
-Download the .apk file from [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
-
-
-# Postman
-
-The backend API collection is available on Postman [here](https://grad-project-9975.postman.co/workspace/Personal~aec82f60-08b4-4964-8861-0b9414f1b7c4/collection/44435924-1bb3ce08-54bf-4cf3-9bb0-1adac6b8afd9?action=share&source=copy-link&creator=44435924).
+For the Flutter mobile application:
+1. Download the .apk file from [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
 
 # Limitations & Future Work
 1.	Use DTOs in the frontend for consistent API communication.
