@@ -45,8 +45,8 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 # Copy the built application
 COPY --from=build /usr/src/app/dist ./dist
 
-# NEW: Declare a persistent volume for media
-# VOLUME /usr/src/app/src/uploads
+# This is where the container expects persistent data
+VOLUME /usr/src/app/dist/uploads 
 
 EXPOSE 3081
 

@@ -7,10 +7,8 @@ export const upload = multer({
   storage: multer.diskStorage({
     destination: (_, file, cb) => {
       if (isImage(file.originalname)) {
-        console.log(IMAGES_PATH);
         cb(null, IMAGES_PATH);
       } else if (isVideo(file.originalname)) {
-        console.log(VIDEOS_PATH);
         cb(null, VIDEOS_PATH);
       } else {
         cb(new Error('Unsupported file type'), '');
