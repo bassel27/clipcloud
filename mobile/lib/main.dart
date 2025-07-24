@@ -11,7 +11,7 @@ import 'package:mobile/presentation/screens/auth_screen.dart';
 import 'package:mobile/presentation/screens/media_screen.dart';
 
 void main() async {
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: ".env.mobile");
 
   runApp(
     MultiProvider(
