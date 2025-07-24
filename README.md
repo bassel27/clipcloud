@@ -18,11 +18,12 @@ The database is implemented using MySQL and deployed via AWS RDS in a private su
 The frontend is developed using React with TypeScript.
 
 # Setup Instructions
-No setup required for backend and database. Both are already deployed and accessible. Otherwise, for the frontend React app:
-1. Clone the project.
-2. Run "docker-compose up -d --pull always" in main directory
-For the Flutter mobile application:
-1. Download the .apk file from [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
+No setup required for backend and database. Both are already deployed and accessible. Otherwise:
+- For the frontend React app:
+  1. Clone the project.
+  2. Run "docker-compose up -d --pull always" in main directory
+- For the Flutter mobile application:
+  1. Download the .apk file from [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
 
 # Limitations & Future Work
 1.	Use DTOs in the frontend for consistent API communication.
