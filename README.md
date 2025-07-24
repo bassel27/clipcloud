@@ -1,6 +1,5 @@
 # System Architecture
-![system_arch_clipcloud](https://github.com/user-attachments/assets/bd6bad01-2c61-4aeb-9f6b-6046a015f9d2)
-
+<img width="786" height="526" alt="image" src="https://github.com/user-attachments/assets/b5a68471-0703-4423-9f7a-598752246643" />
 
 # Backend
 
