@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  frontend:
+    image: bassel275/clipcloud-frontend:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - API_BASE_URL=http://51.20.134.23:3081  
+    restart: unless-stopped
