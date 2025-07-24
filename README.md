@@ -1,5 +1,5 @@
 # System Architecture
-<img width="786" height="526" alt="image" src="https://github.com/user-attachments/assets/b5a68471-0703-4423-9f7a-598752246643" />
+<img width="955" height="635" alt="image" src="https://github.com/user-attachments/assets/d20f5fab-a254-42fe-ac80-563048ac7294" />
 
 # Backend
 
