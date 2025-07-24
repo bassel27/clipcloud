@@ -1,3 +1,7 @@
+# System Architecture
+![system_arch_clipcloud](https://github.com/user-attachments/assets/bd6bad01-2c61-4aeb-9f6b-6046a015f9d2)
+
+
 # Backend
 
 The backend is built using Express.js with TypeScript, containerized with Docker, and deployed on AWS ECS using Fargate. Docker images are stored in Amazon ECR.
@@ -35,9 +39,6 @@ Download the .apk file from [here](https://drive.google.com/drive/folders/1yyi20
 # Postman
 
 The backend API collection is available on Postman [here](https://grad-project-9975.postman.co/workspace/Personal~aec82f60-08b4-4964-8861-0b9414f1b7c4/collection/44435924-1bb3ce08-54bf-4cf3-9bb0-1adac6b8afd9?action=share&source=copy-link&creator=44435924).
-
-# System Architecture
-<img width="851" height="611" alt="system_arch_clipcloud" src="https://github.com/user-attachments/assets/6920bcc0-4c83-4378-b484-9da9ec3acf9c" />
 
 # Limitations & Future Work
 1.	Use DTOs in the frontend for consistent API communication.
