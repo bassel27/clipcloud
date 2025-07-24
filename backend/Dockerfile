@@ -34,6 +34,11 @@ FROM base as final
 # Use production node environment by default.
 ENV NODE_ENV=production
 
+RUN apt-get update
+RUN apt-get install -y default-mysql-client
+RUN apt-get clean
+RUN rm -rf /var/lib/apt/lists/*
+
 # Run the application as a non-root user.
 USER root
 

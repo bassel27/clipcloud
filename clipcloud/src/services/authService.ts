@@ -27,7 +27,6 @@ apiClient.interceptors.response.use(
 if ((error.response?.status === 401 || error.response?.status === 403) && !originalRequest._retry) {      originalRequest._retry = true;
       
       try {
-        console.log("refresh token shit")
         const refreshToken = TOKEN_STORAGE.getRefreshToken();
         if (!refreshToken) {
           throw new Error('No refresh token available');
