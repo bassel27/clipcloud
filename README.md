@@ -26,10 +26,10 @@ No setup required for backend and database. Both are already deployed and access
   1. Download the .apk file from [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
 
 # Limitations & Future Work
-1.	Use DTOs in the frontend for consistent API communication.
+1.	Use DTOs in the frontend.
 2.	Remove hardcoded folder paths in the backend.
 3.	Update the database schema so that likes and media are user-specific.
-4.	Remove unused media-related attributes (e.g., media.url, thumbnail.url) from the schema.
+4.	Remove unused media-related attributes (e.g., fileUrl, thumbnailUrl) from the schema.
 5.	Replace use of localStorage with secure methods (e.g., HTTP-only cookies or sessionStorage) for storing access tokens.
 6.	Allow images to be enlarged when clicked.
 7.	Add proper validation to login and signup forms in the frontend.
