@@ -26,7 +26,7 @@ ARG API_BASE_URL
 
 
 # Set environment variables for server-side runtime (only if needed)
-ENV API_BASE_URL=$API_BASE_URL
+ENV NEXT_PUBLIC_API_URL=$API_BASE_URL
 # NEXT_PUBLIC_* variables don't need ENV - they're baked into the build
 
 # Next.js collects completely anonymous telemetry data about general usage.
