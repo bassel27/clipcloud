@@ -26,29 +26,28 @@ These setup instructions run everything locally, diregarding the deployments. No
   1. Download the .apk file from [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
      
 # Setup Instructions (Local Development)
-First, you need to do `git clone https://github.com/bassel27/clipcloud.git`
+First, you need to do `git clone https://github.com/bassel27/clipcloud.git` and download the env.zip [file](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
 - To run database:
   1.  Make sure nothing is running on port 3306
-  2.  Download .env.db [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing) and place it inside db folder.
-  3.  `docker compose up database`
+  2.  Place .env.db and place it inside db folder.
+  3.  `docker compose up -d database`
   
 - To run backend:
   1. `cd backend`
   2. `npm install`
-  3. Download .env.backend [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing) and place it inside backend folder
-  4. Place it in backend
-  5. `npm run dev`
+  3. Place .env.backend inside backend folder
+  4. `npm run dev`
      
 - To run frontend:
   1. `cd frontend`
   2. `npm install`
-  3. Download .env.local [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing) and place it inside frontend folder.
+  3. Place .env.local inside frontend folder.
   4. `npm run dev`
 
 - To run mobile:
   1. `cd mobile`
   2. `flutter pub get`
-  3. Download .env.mobile [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing) and place it inside mobile folder.
+  3. Place .env.mobile inside mobile folder.
   4. Open a device emulator
   5. `flutter run`
 
