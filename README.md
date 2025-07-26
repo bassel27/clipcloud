@@ -21,7 +21,7 @@ The frontend is developed using React with TypeScript.
 These setup instructions run everything locally, diregarding the deployments. No setup required for backend and database. Both are already deployed and accessible. Otherwise:
 - For the frontend React app:
   1. Clone the project.
-  2. Run `docker-compose up -d --pull always frontend` in main directory
+  2. Run `docker compose up -d --pull always frontend` in main directory
 - For the Flutter mobile application:
   1. Download the .apk file from [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
      
@@ -62,3 +62,5 @@ First, you need to do `git clone https://github.com/bassel27/clipcloud.git` and 
 8.	Implement pagination for media API responses.
 9.	Write unit and integration tests for both frontend and backend.
 10.	Replace hardcoded size values in the Flutter app for better responsiveness.
+11.	Privatize backend
+12.	Use a persistent volume for AWS ECS with AWS EFS
