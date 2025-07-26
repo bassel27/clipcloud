@@ -18,7 +18,7 @@ The database is implemented using MySQL and deployed via AWS RDS in a private su
 The frontend is developed using React with TypeScript.
 
 # Setup Instructions (Deployment)
-No setup required for backend and database. Both are already deployed and accessible. Otherwise:
+These setup instructions run everything locally, diregarding the deployments. No setup required for backend and database. Both are already deployed and accessible. Otherwise:
 - For the frontend React app:
   1. Clone the project.
   2. Run `docker-compose up -d --pull always frontend` in main directory
@@ -48,7 +48,9 @@ First, you need to do `git clone https://github.com/bassel27/clipcloud.git`
 - To run mobile:
   1. `cd mobile`
   2. `flutter pub get`
-  3. Run without debugging
+  3. Download .env.mobile [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing) and place it inside mobile folder.
+  4. Open a device emulator
+  5. `flutter run`
 
 # Limitations & Future Work
 1.	Use DTOs in backend.
