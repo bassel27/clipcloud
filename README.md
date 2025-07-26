@@ -17,16 +17,43 @@ x
 
 The frontend is developed using React with TypeScript.
 
-# Setup Instructions
-No setup required for backend and database. Both are already deployed and accessible. Otherwise:
+# Setup Instructions (Deployment)
+These setup instructions run everything locally, diregarding the deployments. No setup required for backend and database. Both are already deployed and accessible. Otherwise:
 - For the frontend React app:
   1. Clone the project.
-  2. Run "docker-compose up -d --pull always" in main directory
+  2. Run `docker-compose up -d --pull always frontend` in main directory
 - For the Flutter mobile application:
   1. Download the .apk file from [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
+     
+# Setup Instructions (Local Development)
+First, you need to do `git clone https://github.com/bassel27/clipcloud.git`
+- To run database:
+  1.  Make sure nothing is running on port 3306
+  2.  Download .env.db [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing) and place it inside db folder.
+  3.  `docker compose up database`
+  
+- To run backend:
+  1. `cd backend`
+  2. `npm install`
+  3. Download .env.backend [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing) and place it inside backend folder
+  4. Place it in backend
+  5. `npm run dev`
+     
+- To run frontend:
+  1. `cd frontend`
+  2. `npm install`
+  3. Download .env.local [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing) and place it inside frontend folder.
+  4. `npm run dev`
+
+- To run mobile:
+  1. `cd mobile`
+  2. `flutter pub get`
+  3. Download .env.mobile [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing) and place it inside mobile folder.
+  4. Open a device emulator
+  5. `flutter run`
 
 # Limitations & Future Work
-1.	Use DTOs in the frontend.
+1.	Use DTOs in backend.
 2.	Remove hardcoded folder paths in the backend.
 3.	Update the database schema so that likes and media are user-specific.
 4.	Remove unused media-related attributes (e.g., fileUrl, thumbnailUrl) from the schema.
