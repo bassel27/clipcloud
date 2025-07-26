@@ -23,25 +23,26 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    
-if ((error.response?.status === 401 || error.response?.status === 403) && !originalRequest._retry) {      originalRequest._retry = true;
-      
+
+    if ((error.response?.status === 401 || error.response?.status === 403) && !originalRequest._retry) {
+      originalRequest._retry = true;
+
       try {
         const refreshToken = TOKEN_STORAGE.getRefreshToken();
         if (!refreshToken) {
           throw new Error('No refresh token available');
         }
-        
+
         const response = await axios.post(`${API_BASE_URL}/auth/refresh-token`, {
           refreshToken
         });
-        
+
         const { accessToken, refreshToken: newRefreshToken } = response.data;
         TOKEN_STORAGE.setTokens(accessToken, newRefreshToken);
-        
+
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return apiClient(originalRequest);
-        
+
       } catch (refreshError) {
         console.log("refresh error:" + refreshError)
         TOKEN_STORAGE.clearTokens();
@@ -49,7 +50,7 @@ if ((error.response?.status === 401 || error.response?.status === 403) && !origi
         return Promise.reject(refreshError);
       }
     }
-    
+
     return Promise.reject(error);
   }
 );
@@ -62,7 +63,7 @@ export const login = async (email: string, password: string) => {
 
   const { accessToken, refreshToken } = response.data;
   TOKEN_STORAGE.setTokens(accessToken, refreshToken);
-  
+
   return response.data;
 };
 
@@ -72,9 +73,7 @@ export const register = async (email: string, password: string) => {
     password,
   });
 
-  // Note: Your backend register doesn't return tokens, only user info
-  // You might want to auto-login after registration
-  return response.data; 
+  return response.data;
 };
 
 

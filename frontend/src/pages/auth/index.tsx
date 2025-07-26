@@ -1,4 +1,3 @@
-// pages/auth.tsx
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { login, register, isAuthenticated } from '@/services/authService';
@@ -11,13 +10,6 @@ export default function AuthPage() {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
-
-    // useEffect(() => {
-    //     if (isAuthenticated()) {
-    //         router.push('/media');
-    //     }
-    // }, [router]);
-
     
     const validateInputs = () => {
         if (!email.trim()) {
@@ -51,11 +43,9 @@ export default function AuthPage() {
                 router.push('/media');
             } else {
                 await register(email, password);
-                // After successful registration, auto-login or show success message
                 setError('');
-                setIsLogin(true); // Switch to login form
-                setPassword(''); // Clear password for security
-                // Show success message
+                setIsLogin(true); 
+                setPassword(''); 
                 alert('Registration successful! Please sign in.');
             }
         } catch (err: any) {

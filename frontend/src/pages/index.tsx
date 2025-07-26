@@ -1,4 +1,3 @@
-// pages/index.tsx
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { isAuthenticated } from '@/services/authService';
