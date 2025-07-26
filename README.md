@@ -21,18 +21,34 @@ The frontend is developed using React with TypeScript.
 No setup required for backend and database. Both are already deployed and accessible. Otherwise:
 - For the frontend React app:
   1. Clone the project.
-  2. Run "docker-compose up -d --pull always" in main directory
+  2. Run `docker-compose up -d --pull always frontend` in main directory
 - For the Flutter mobile application:
   1. Download the .apk file from [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
-# Setup Instructions (Development)
+     
+# Setup Instructions (Local Development)
 First, you need to do `git clone https://github.com/bassel27/clipcloud.git`
-To run back end:
+- To run database:
+  1.  Make sure nothing is running on port 3306
+  2.  Download .env.db [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing) and place it inside db folder.
+  3.  `docker compose up database`
+  
+- To run backend:
   1. `cd backend`
   2. `npm install`
-  3. Download .env.backend [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
+  3. Download .env.backend [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing) and place it inside backend folder
   4. Place it in backend
   5. `npm run dev`
+     
+- To run frontend:
+  1. `cd frontend`
+  2. `npm install`
+  3. Download .env.local [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing) and place it inside frontend folder.
+  4. `npm run dev`
 
+- To run mobile:
+  1. `cd mobile`
+  2. `flutter pub get`
+  3. Run without debugging
 
 # Limitations & Future Work
 1.	Use DTOs in backend.
