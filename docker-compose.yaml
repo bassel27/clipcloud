@@ -7,3 +7,12 @@ services:
     environment:
       - API_BASE_URL=http://51.20.134.23:3081  
     restart: unless-stopped
+ 
+  database:
+    image: mysql:8.0
+    volumes:
+      - ./db/migrations:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    env_file:
+      - ./db/.env.db
