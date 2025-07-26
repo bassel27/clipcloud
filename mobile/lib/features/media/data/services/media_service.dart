@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:mobile/data/models/media.dart';
-import 'package:mobile/data/repositories/media_repository.dart';
+import 'package:mobile/features/media/data/models/media.dart';
+import 'package:mobile/features/media/data/repositories/media_repository.dart';
 
 class MediaService {
   final MediaRepository _repo;

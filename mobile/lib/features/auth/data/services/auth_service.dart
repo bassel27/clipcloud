@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:mobile/data/repositories/auth_repository.dart';
+import 'package:mobile/features/auth/data/repositories/auth_repository.dart';
 
 class AuthService with ChangeNotifier {
   final AuthRepository _repo;

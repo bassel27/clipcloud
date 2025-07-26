@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/data/services/media_service.dart';
-import 'package:mobile/presentation/widgets/auth_form.dart';
+import 'package:mobile/features/media/data/services/media_service.dart';
+import 'package:mobile/features/auth/presentation/widgets/auth_form.dart';
 import 'package:provider/provider.dart';
 import '../../data/services/auth_service.dart';
 import 'package:flutter/material.dart';

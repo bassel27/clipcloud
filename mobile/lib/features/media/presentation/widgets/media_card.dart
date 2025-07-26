@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/data/models/media.dart';
-import 'package:mobile/presentation/screens/video_player_screen.dart';
+import 'package:mobile/features/media/data/models/media.dart';
+import 'package:mobile/features/media/presentation/screens/video_player_screen.dart';
 
 class MediaCard extends StatelessWidget {
   final Media media;

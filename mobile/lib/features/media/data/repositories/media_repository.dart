@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
-import 'package:mobile/data/repositories/auth_interceptor.dart';
+import 'package:mobile/features/auth/data/repositories/auth_interceptor.dart';
 import '../models/media.dart';
-import '../services/auth_service.dart';
+import '../../../auth/data/services/auth_service.dart';
 
 class MediaRepository {
   final Dio _dio;

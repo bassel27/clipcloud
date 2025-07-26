@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mobile/data/models/media.dart';
-import 'package:mobile/data/services/media_service.dart';
-import 'package:mobile/presentation/widgets/media_card.dart';
+import 'package:mobile/features/media/data/models/media.dart';
+import 'package:mobile/features/media/data/services/media_service.dart';
+import 'package:mobile/features/media/presentation/widgets/media_card.dart';
 import 'package:file_picker/file_picker.dart';
 
 class MediaPage extends StatefulWidget {
