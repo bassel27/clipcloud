@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, ChangeEvent } from 'react';
-import MediaCard from '../../components/MediaCard/MediaCard';
 import { Media } from '@/types/media';
 import styles from './media.module.css';
 import { useRouter } from 'next/router';
 import { fetchMedia, uploadMedia } from '@/services/mediaService';
+import { MediaCard } from '@/components/MediaCard/MediaCard';
 
 export default function MediaPage() {
   const [mediaList, setMediaList] = useState<Media[]>([]);
