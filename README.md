@@ -1,3 +1,15 @@
+# Table of Contents
+
+- [System Architecture](#system-architecture)
+- [Backend](#backend)
+  - [Postman](#postman)
+- [Database](#database)
+- [Frontend](#frontend)
+- [Setup Instructions](#setup-instructions)
+  - [Deployment](#deployment)
+  - [Local Development](#local-development)
+- [Limitations & Future Work](#limitations--future-work)
+
 # System Architecture
 <img width="955" height="635" alt="image" src="https://github.com/user-attachments/assets/d20f5fab-a254-42fe-ac80-563048ac7294" />
 
@@ -12,12 +24,13 @@ The backend API collection is available on Postman [here](https://grad-project-9
 # Database
 
 The database is implemented using MySQL and deployed via AWS RDS in a private subnet for security. It is only accessible through the backend ECS container. Both the backend and the database are in the same VPC, which has an Internet Gateway (IGW) to allow public access to the backend only.
-x
+
 # Frontend
 
 The frontend is developed using React with TypeScript.
 
-# Setup Instructions (Deployment)
+# Setup Instructions
+## Deployment
 These setup instructions run everything locally, diregarding the deployments. No setup required for backend and database. Both are already deployed and accessible. Otherwise:
 - For the frontend React app:
   1. Clone the project.
@@ -25,7 +38,7 @@ These setup instructions run everything locally, diregarding the deployments. No
 - For the Flutter mobile application:
   1. Download the .apk file from [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
      
-# Setup Instructions (Local Development)
+## Local Development
 First, you need to do `git clone https://github.com/bassel27/clipcloud.git` and download the env.zip [file](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
 - To run database:
   1.  Make sure nothing is running on port 3306
