@@ -1,4 +1,3 @@
-// lib/presentation/widgets/media_card.dart
 import 'package:flutter/material.dart';
 import 'package:mobile/data/models/media.dart';
 import 'package:mobile/presentation/screens/video_player_screen.dart';

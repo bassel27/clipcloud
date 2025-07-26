@@ -1,6 +1,4 @@
-// lib/domain/services/auth_service.dart
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:mobile/data/repositories/auth_repository.dart';
 
