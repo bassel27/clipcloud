@@ -1,1 +1,1 @@
-export const API_BASE_URL = process.env.API_BASE_URL || "http://51.20.134.23:3081";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
