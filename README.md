@@ -23,7 +23,8 @@ The backend API collection is available on Postman [here](https://grad-project-9
 
 # Database
 
-The database is implemented using MySQL and deployed via AWS RDS in a private subnet for security. It is only accessible through the backend ECS container. Both the backend and the database are in the same VPC, which has an Internet Gateway (IGW) to allow public access to the backend only.
+The database is implemented using MySQL and deployed via AWS RDS in a private subnet for security. It is only accessible through the backend ECS container. Both the backend and the database are in the same VPC, which has an Internet Gateway (IGW) to allow public access to the backend only.  
+Note: There are several suboptimal design choices and redundant attributes in the database schema, as discussed in the [the limitations section](#limitations--future-work). Due to time constraints, these issues have not yet been addressed.
 
 # Frontend
 
