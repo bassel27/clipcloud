@@ -8,7 +8,6 @@ import authRoutes from './routes/auth.routes';
 import { verifyAccessToken } from './middlewares/auth.middleware';
 import { ensureDirectoriesExist, serveFileById } from './utils/media.utils';
 
-dotenv.config();
 ensureDirectoriesExist([VIDEOS_PATH, THUMBNAILS_PATH, IMAGES_PATH]);
 const app = express();
 
