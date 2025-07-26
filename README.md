@@ -68,9 +68,9 @@ First, you need to do `git clone https://github.com/bassel27/clipcloud.git` and 
 # Limitations & Future Work
 1.	Use DTOs in backend.
 2.	Remove hardcoded folder paths in the backend.
-3.	Update the database schema so that likes and media are user-specific.
+3.	Update the database schema so that _likes_ and _media_ are user-specific through a FK in Media table and a new table for likes.
 4.	Remove unused media-related attributes (e.g., fileUrl, thumbnailUrl) from the schema.
-5.	Replace use of localStorage with secure methods (e.g., HTTP-only cookies or sessionStorage) for storing access tokens.
+5.	Replace use of sessionStorage with secure methods such as HTTP-only cookies for storing access tokens.
 6.	Allow images to be enlarged when clicked.
 7.	Add proper validation to login and signup forms in the frontend.
 8.	Implement pagination for media API responses.
@@ -78,3 +78,4 @@ First, you need to do `git clone https://github.com/bassel27/clipcloud.git` and 
 10.	Replace hardcoded size values in the Flutter app for better responsiveness.
 11.	Privatize backend
 12.	Use a persistent volume for AWS ECS with AWS EFS
+13.	Lazy loading of videos instead of fetching it in advance
