@@ -77,16 +77,6 @@ export const register = async (email: string, password: string) => {
   return response.data; 
 };
 
-// export const logout = async () => {
-//   try {
-//     // Optional: Call backend logout endpoint
-//     await apiClient.post('/auth/logout');
-//   } catch (error) {
-//     console.error('Logout error:', error);
-//   } finally {
-//     TOKEN_STORAGE.clearTokens();
-//   }
-// };
 
 export const isAuthenticated = (): boolean => {
   return !!TOKEN_STORAGE.getAccessToken();

@@ -3,16 +3,16 @@
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Base elevation */
   overflow: hidden;
-  transition: box-shadow 0.3s ease, transform 0.2s ease; /* Added transform for slight lift */
+  transition: box-shadow 0.3s ease, transform 0.2s ease;  /* When the box-shadow changes */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid #eee; /* Light border for subtle edge definition */
+  border: 1px solid #eee; 
 }
 
 .card:hover {
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
-  transform: translateY(-4px); /* Slight lift on hover */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+  transform: translateY(-4px); /* Slight lift */
 }
 
 .header {
@@ -61,7 +61,7 @@
 .time {
   font-size: 0.8rem;
   color: #666;
-  font-weight: 500; /* Slightly bolder for readability */
+  font-weight: 500;
 }
 
 .likeButton {
@@ -74,8 +74,8 @@
 }
 
 .likeButton:hover {
-  background: rgba(255, 0, 0, 0.12); /* Softer hover background */
-  transform: scale(1.1); /* Slight pop on hover */
+  background: rgba(255, 0, 0, 0.12);
+  transform: scale(1.1); 
 }
 
 

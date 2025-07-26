@@ -3,7 +3,7 @@ import ffmpeg from 'fluent-ffmpeg';
 import ffmpegPath from 'ffmpeg-static';
 import { Media, MediaType } from '../models/media.model';
 import { SRC_PATH, THUMBNAILS_PATH } from '../config/constants';
-import { getPublicUrl, nowDateSQLFormat } from '../utils/media.utils';
+import { getPublicUrl as getMediaUrl, nowDateSQLFormat } from '../utils/media.utils';
 import path from 'path';
 import {  findAll, create, updateMediaLikeStatusById} from '../repositories/media.repository';
 import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';
@@ -12,8 +12,6 @@ import ffprobeInstaller from '@ffprobe-installer/ffprobe';
 export async function getAllMedia(): Promise<Media[]> {
   return await findAll();
 }
-
-
 
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 ffmpeg.setFfprobePath(ffprobeInstaller.path);
@@ -32,7 +30,7 @@ export async function generateThumbnail(videoPath: string, thumbnailFileName: st
 }
 
 async function registerMediaBase(
-  filePath: string,  // Relative path like 'videos/abc123.mp4'
+  filePath: string,  
   type: MediaType,
   fileId: string, 
   thumbnailPath?: string
@@ -53,8 +51,8 @@ async function registerMediaBase(
     type,
     isLiked: false,
     createdAt,
-    url: getPublicUrl(filePath),
-    thumbnailUrl: thumbnailPath ? getPublicUrl(thumbnailPath) : undefined
+    url: getMediaUrl(filePath),
+    thumbnailUrl: thumbnailPath ? getMediaUrl(thumbnailPath) : undefined
   };
 }
 
@@ -93,3 +91,4 @@ export async function toggleLike(id: string): Promise<Media> {
 
   return toggled;
 }
+

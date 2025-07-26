@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { Media } from "@/types/media";
+import { Media, MediaType } from "@/types/media";
 import { API_BASE_URL } from "@/utils/constants";
 import { apiClient } from './authService';
+import { getMediaUrl, getThumbnailUrl } from '@/utils/utils';
 
 export const fetchMedia = async (): Promise<Media[]> => {
   const res = await apiClient.get('/media');
@@ -26,3 +27,27 @@ export const uploadMedia = async (file: File): Promise<Media> => {
 
   return res.data;
 };
+
+export async function fetchMediaBlob(mediaId: string, mediaType: MediaType): Promise<Blob> {
+  const response = await axios.get(getMediaUrl(mediaId, mediaType), {
+    responseType: 'blob',
+  });
+
+  if (!response || !response.data) {
+    throw new Error('Failed to fetch media');
+  }
+
+  return response.data;
+}
+
+export async function fetchThumbnailBlob(mediaId: string): Promise<Blob> {
+  const response = await axios.get(getThumbnailUrl(mediaId), {
+    responseType: 'blob',
+  });
+
+  if (!response || !response.data) {
+    throw new Error('Failed to fetch thumbnail');
+  }
+
+  return response.data;
+}

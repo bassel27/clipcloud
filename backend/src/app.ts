@@ -1,7 +1,5 @@
-// app.ts
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import { IMAGES_PATH, THUMBNAILS_PATH, VIDEOS_PATH } from './config/constants';
 import mediaRoutes from './routes/media.routes';
 import authRoutes from './routes/auth.routes';
