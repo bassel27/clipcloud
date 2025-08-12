@@ -32,7 +32,7 @@ The frontend is developed using React with TypeScript.
 
 # Setup Instructions
 ## Deployment
-These setup instructions run everything locally, diregarding the deployments. No setup required for backend and database. Both are already deployed and accessible. Otherwise:
+No setup required for backend and database. Both are already deployed and accessible. Otherwise:
 - For the frontend React app:
   1. Clone the project.
   2. Run `docker compose up -d --pull always frontend` in main directory
@@ -40,7 +40,7 @@ These setup instructions run everything locally, diregarding the deployments. No
   1. Download the .apk file from [here](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
      
 ## Local Development
-First, you need to do `git clone https://github.com/bassel27/clipcloud.git` and download the env.zip [file](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
+These setup instructions run everything locally, diregarding the deployments. First, you need to do `git clone https://github.com/bassel27/clipcloud.git` and download the env.zip [file](https://drive.google.com/drive/folders/1yyi20oIRq53Mug5WAduRbgFvfKUt1Bvn?usp=sharing).
 - To run database:
   1.  Make sure nothing is running on port 3306
   2.  Place .env.db and place it inside db folder.
